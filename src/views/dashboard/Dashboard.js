@@ -857,6 +857,15 @@ const Dashboard = () => {
                       color="dark"
                       onClick={() => {
                         setReset(true)
+                        let empty = [
+                          {
+                            startDate: new Date(oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 2)),
+                            endDate: today,
+                            key: 'selection',
+                          },
+                        ]
+                        setSelectionRange(empty)
+                        fetchData()
                       }}
                     >
                       Reset

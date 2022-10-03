@@ -300,7 +300,7 @@ export default function TableList({ jenisPajak, icon }) {
             <CTableDataCell></CTableDataCell>
             <CTableDataCell></CTableDataCell>
             <CTableDataCell></CTableDataCell>
-            <CTableDataCell></CTableDataCell>
+            {/* <CTableDataCell></CTableDataCell> */}
           </CTableRow>
         </>
       )
@@ -355,7 +355,7 @@ export default function TableList({ jenisPajak, icon }) {
             <CTableDataCell>
               <div>{badgeSelector(item.status)}</div>
             </CTableDataCell>
-            <CTableDataCell>
+            {/* <CTableDataCell>
               <CButton
                 color="primary"
                 variant="outline"
@@ -367,7 +367,7 @@ export default function TableList({ jenisPajak, icon }) {
               >
                 Detail
               </CButton>
-            </CTableDataCell>
+            </CTableDataCell> */}
           </CTableRow>
         ))
       } else {
@@ -386,7 +386,7 @@ export default function TableList({ jenisPajak, icon }) {
               <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
-              <CTableDataCell></CTableDataCell>
+              {/* <CTableDataCell></CTableDataCell> */}
             </CTableRow>
           </>
         )
@@ -599,6 +599,15 @@ export default function TableList({ jenisPajak, icon }) {
                       color="dark"
                       onClick={() => {
                         setReset(true)
+                        let empty = [
+                          {
+                            startDate: today,
+                            endDate: today,
+                            key: 'selection',
+                          },
+                        ]
+                        setSelectionRange(empty)
+                        fetchData(statusFilter, npwpdFilter, true)
                       }}
                     >
                       Reset
@@ -753,7 +762,7 @@ export default function TableList({ jenisPajak, icon }) {
                     <CTableHeaderCell>Tanggal Jatuh Tempo</CTableHeaderCell>
                     <CTableHeaderCell>Periode</CTableHeaderCell>
                     <CTableHeaderCell>Status</CTableHeaderCell>
-                    <CTableHeaderCell></CTableHeaderCell>
+                    {/* <CTableHeaderCell></CTableHeaderCell> */}
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
