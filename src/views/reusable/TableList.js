@@ -29,17 +29,20 @@ import {
   CDropdownItem,
   CContainer,
   CWidgetStatsF,
+  CButtonGroup,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilWarning, cilSearch, cilFilter, cilSettings, cilUser } from '@coreui/icons'
+import { cilWarning, cilSearch, cilFilter, cilX, cilCloudDownload, cilCheck } from '@coreui/icons'
 import 'react-date-range/dist/styles.css' // main style file
 import 'react-date-range/dist/theme/default.css' // theme css file
 import axios from 'axios'
 import _ from 'lodash'
 import { format } from 'date-fns'
 import CurrencyFormat from 'react-currency-format'
+import { DateRangePicker } from 'react-date-range'
+import CsvDownloader from 'react-csv-downloader'
 
-export default function TableList({ jenisPajak }) {
+export default function TableList({ jenisPajak, icon }) {
   const [load, setLoad] = useState(true)
   const [reklame, setReklame] = useState([])
   const [toast, addToast] = useState(0)
@@ -52,8 +55,18 @@ export default function TableList({ jenisPajak }) {
   const [countIzinKadaluarsa, setCountIzinKadaluarsa] = useState(0)
   const toaster = useRef()
   const today = new Date()
+  const twoMonthAgo = new Date(today.setMonth(today.getMonth() - 2))
+  const [selectionRange, setSelectionRange] = useState([
+    {
+      startDate: today,
+      endDate: today,
+      key: 'selection',
+    },
+  ])
+  const [reset, setReset] = useState(true)
 
-  function fetchData(status, npwpd) {
+  function fetchData(status, npwpd, date) {
+    console.log(date)
     setLoad(true)
     let query =
       'http://maiharta.ddns.net:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
@@ -67,6 +80,10 @@ export default function TableList({ jenisPajak }) {
         const reklames = _.filter(res.data.data, filter)
         console.log(reklames)
         let data = []
+        const inpStart = selectionRange[0].startDate
+        const inpEnd = selectionRange[0].endDate
+        const start = new Date(inpStart.setDate(inpStart.getDate() - 1))
+        const end = new Date(inpEnd.setDate(inpEnd.getDate() + 1))
         reklames.map((rek) => {
           let singular = {}
           if (rek.ketetapan.length !== 0) {
@@ -80,7 +97,110 @@ export default function TableList({ jenisPajak }) {
                   let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
                   let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
                   const periode = [awal, akhir]
-                  console.log(periode)
+                  if (date === false) {
+                    if (awal >= start && awal < end && akhir > start && akhir <= end) {
+                      if (akhir < today) {
+                        singular = {
+                          nomor: ket.nomor,
+                          npwpd: rek.npwpd,
+                          npwpdLama: rek.npwpdLama,
+                          jenis_reklame: rek.namaJenisPajakUsaha,
+                          lokasi_pemasangan: ket.lokasi,
+                          nama_wajib_pajak: rek.namaUsaha,
+                          nominal: ket.pokokPajak,
+                          tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                          periode: periode,
+                          status: 'Ijin Kadaluarsa',
+                        }
+                        data.push(singular)
+                      } else {
+                        singular = {
+                          nomor: ket.nomor,
+                          npwpd: rek.npwpd,
+                          npwpdLama: rek.npwpdLama,
+                          jenis_reklame: rek.namaJenisPajakUsaha,
+                          lokasi_pemasangan: ket.lokasi,
+                          nama_wajib_pajak: rek.namaUsaha,
+                          nominal: ket.pokokPajak,
+                          tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                          periode: periode,
+                          status: ket.statusPembayaran,
+                        }
+                        data.push(singular)
+                      }
+                    }
+                  } else {
+                    if (akhir < today) {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: 'Ijin Kadaluarsa',
+                      }
+                      data.push(singular)
+                    } else {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: ket.statusPembayaran,
+                      }
+                      data.push(singular)
+                    }
+                  }
+                }
+              } else {
+                const period = ket.periode.split(' s/d ')
+                const [startDay, startMonth, startYear] = period[0].split('-')
+                const [endDay, endMonth, endYear] = period[1].split('-')
+                let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
+                let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
+                const periode = [awal, akhir]
+                if (date === false) {
+                  if (awal >= start && awal < end && akhir > start && akhir <= end) {
+                    if (akhir < today) {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: 'Ijin Kadaluarsa',
+                      }
+                      return data.push(singular)
+                    } else {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: ket.statusPembayaran,
+                      }
+                      return data.push(singular)
+                    }
+                  }
+                } else {
                   if (akhir < today) {
                     singular = {
                       nomor: ket.nomor,
@@ -94,7 +214,7 @@ export default function TableList({ jenisPajak }) {
                       periode: periode,
                       status: 'Ijin Kadaluarsa',
                     }
-                    data.push(singular)
+                    return data.push(singular)
                   } else {
                     singular = {
                       nomor: ket.nomor,
@@ -108,45 +228,8 @@ export default function TableList({ jenisPajak }) {
                       periode: periode,
                       status: ket.statusPembayaran,
                     }
-                    data.push(singular)
+                    return data.push(singular)
                   }
-                }
-              } else {
-                const period = ket.periode.split(' s/d ')
-                const [startDay, startMonth, startYear] = period[0].split('-')
-                const [endDay, endMonth, endYear] = period[1].split('-')
-                let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
-                let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
-                const periode = [awal, akhir]
-                console.log(periode)
-                if (akhir < today) {
-                  singular = {
-                    nomor: ket.nomor,
-                    npwpd: rek.npwpd,
-                    npwpdLama: rek.npwpdLama,
-                    jenis_reklame: rek.namaJenisPajakUsaha,
-                    lokasi_pemasangan: ket.lokasi,
-                    nama_wajib_pajak: rek.namaUsaha,
-                    nominal: ket.pokokPajak,
-                    tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                    periode: periode,
-                    status: 'Ijin Kadaluarsa',
-                  }
-                  return data.push(singular)
-                } else {
-                  singular = {
-                    nomor: ket.nomor,
-                    npwpd: rek.npwpd,
-                    npwpdLama: rek.npwpdLama,
-                    jenis_reklame: rek.namaJenisPajakUsaha,
-                    lokasi_pemasangan: ket.lokasi,
-                    nama_wajib_pajak: rek.namaUsaha,
-                    nominal: ket.pokokPajak,
-                    tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                    periode: periode,
-                    status: ket.statusPembayaran,
-                  }
-                  return data.push(singular)
                 }
               }
             })
@@ -171,22 +254,23 @@ export default function TableList({ jenisPajak }) {
         } else {
           setReklame(data)
         }
-        console.log(data)
         const belumBayar = _.filter(data, { status: 'Belum Lunas' })
         const sudahBayar = _.filter(data, { status: 'Sudah Lunas' })
         const izinKadaluarsa = _.filter(data, { status: 'Ijin Kadaluarsa' })
         setCountBelumBayar(belumBayar.length)
         setCountSudahBayar(sudahBayar.length)
         setCountIzinKadaluarsa(izinKadaluarsa.length)
+        inpStart.setDate(inpStart.getDate() + 1)
+        inpEnd.setDate(inpEnd.getDate() - 1)
         setLoad(false)
       })
       .catch((error) => {
         setLoad(false)
         const errorToast = (
-          <CToast title="An error has occurred">
+          <CToast title="Terjadi kesalahan">
             <CToastHeader closeButton>
               <CIcon className="rounded me-2" icon={cilWarning} />
-              <strong className="me-auto">An error has occurred</strong>
+              <strong className="me-auto">Terjadi kesalahan</strong>
             </CToastHeader>
             <CToastBody>{error.message}</CToastBody>
           </CToast>
@@ -196,7 +280,7 @@ export default function TableList({ jenisPajak }) {
   }
 
   useEffect(() => {
-    fetchData(statusFilter, npwpdFilter)
+    fetchData(statusFilter, npwpdFilter, reset)
   }, [])
 
   const tableContents = (tableData, setKetetapan, modal, setModal) => {
@@ -206,11 +290,15 @@ export default function TableList({ jenisPajak }) {
           <CTableRow v-for="item in tableItems" key="load">
             <CTableDataCell></CTableDataCell>
             <CTableDataCell></CTableDataCell>
+            <CTableDataCell></CTableDataCell>
+            <CTableDataCell></CTableDataCell>
             <CTableDataCell>
               <div className="m-5 text-center">
                 <div className="spinner-border text-danger"></div>
               </div>
             </CTableDataCell>
+            <CTableDataCell></CTableDataCell>
+            <CTableDataCell></CTableDataCell>
             <CTableDataCell></CTableDataCell>
             <CTableDataCell></CTableDataCell>
           </CTableRow>
@@ -288,11 +376,15 @@ export default function TableList({ jenisPajak }) {
             <CTableRow v-for="item in tableItems" key="none">
               <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
+              <CTableDataCell></CTableDataCell>
+              <CTableDataCell></CTableDataCell>
               <CTableDataCell>
                 <div className="m-5 text-center">
                   <p>No data</p>
                 </div>
               </CTableDataCell>
+              <CTableDataCell></CTableDataCell>
+              <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
             </CTableRow>
@@ -418,7 +510,7 @@ export default function TableList({ jenisPajak }) {
           <CCol xs={12} sm={3}>
             <CWidgetStatsF
               className="mb-3"
-              icon={<CIcon width={24} icon={cilSettings} size="xl" />}
+              icon={<CIcon width={24} icon={cilX} size="xl" />}
               title={jenisPajak + ' Belum Lunas'}
               value={countBelumBayar}
               color="danger"
@@ -427,7 +519,7 @@ export default function TableList({ jenisPajak }) {
           <CCol xs={12} sm={3}>
             <CWidgetStatsF
               className="mb-3"
-              icon={<CIcon width={24} icon={cilUser} size="xl" />}
+              icon={<CIcon width={24} icon={cilWarning} size="xl" />}
               title={jenisPajak + ' Ijin Kadaluarsa'}
               value={countIzinKadaluarsa}
               color="warning"
@@ -436,7 +528,7 @@ export default function TableList({ jenisPajak }) {
           <CCol xs={12} sm={3}>
             <CWidgetStatsF
               className="mb-3"
-              icon={<CIcon width={24} icon={cilUser} size="xl" />}
+              icon={<CIcon width={24} icon={cilCheck} size="xl" />}
               title={jenisPajak + ' Sudah Lunas'}
               value={countSudahBayar}
               color="success"
@@ -445,7 +537,7 @@ export default function TableList({ jenisPajak }) {
           <CCol xs={12} sm={3}>
             <CWidgetStatsF
               className="mb-3"
-              icon={<CIcon width={24} icon={cilUser} size="xl" />}
+              icon={<CIcon width={24} icon={icon} size="xl" />}
               title={'Total ' + jenisPajak}
               value={countSudahBayar + countIzinKadaluarsa + countBelumBayar}
               color="primary"
@@ -458,10 +550,136 @@ export default function TableList({ jenisPajak }) {
           <CCard className="mb-4">
             <CCardBody>
               <CRow>
+                <CCol sm={7} className="d-none d-md-block" style={{ marginBottom: '2vh' }}>
+                  <CButtonGroup role="group">
+                    <CDropdown variant="btn-group">
+                      <CButton variant="outline" color="dark" disabled>
+                        {(() => {
+                          if (reset) {
+                            return 'Periode: Semua Periode'
+                          } else {
+                            let strRet =
+                              'Periode: ' +
+                              format(new Date(selectionRange[0].startDate), 'dd MMMM yyyy') +
+                              ' - ' +
+                              format(new Date(selectionRange[0].endDate), 'dd MMMM yyyy')
+                            return strRet
+                          }
+                        })()}
+                      </CButton>
+                      <CDropdownToggle variant="outline" color="secondary" split />
+                      <CDropdownMenu>
+                        <DateRangePicker
+                          onChange={(item) => {
+                            setReset(false)
+                            setSelectionRange([item.selection])
+                          }}
+                          showSelectionPreview={true}
+                          showDateDisplay={true}
+                          showMonthAndYearPickers={true}
+                          showPreview={false}
+                          moveRangeOnFirstSelection={false}
+                          ranges={selectionRange}
+                          direction="horizontal"
+                        />
+                      </CDropdownMenu>
+                    </CDropdown>
+                    <CButton
+                      variant="outline"
+                      color="danger"
+                      onClick={() => {
+                        setReset(false)
+                        fetchData(statusFilter, npwpdFilter, false)
+                      }}
+                    >
+                      Filter
+                    </CButton>
+                    <CButton
+                      variant="outline"
+                      color="dark"
+                      onClick={() => {
+                        setReset(true)
+                      }}
+                    >
+                      Reset
+                    </CButton>
+                  </CButtonGroup>
+                </CCol>
+                <CCol sm={5} className="d-none d-md-block">
+                  {/* <CButton color="danger" className="float-end me-3">
+                    <CIcon icon={cilCloudDownload} /> Unduh Laporan
+                  </CButton> */}
+                  <CsvDownloader
+                    filename={(() => {
+                      if (reset) {
+                        let strRet = 'laporan_' + jenisPajak + '_' + 'semua'
+                        return strRet
+                      } else {
+                        let strRet =
+                          'laporan_' +
+                          jenisPajak +
+                          '_' +
+                          format(new Date(selectionRange[0].startDate), 'ddMMyy') +
+                          '-' +
+                          format(new Date(selectionRange[0].endDate), 'ddMMyy')
+                        return strRet
+                      }
+                    })()}
+                    extension=".csv"
+                    separator=";"
+                    wrapColumnChar=""
+                    columns={[
+                      {
+                        id: 'nomor',
+                        displayName: 'Nomor ',
+                      },
+                      {
+                        id: 'npwpd',
+                        displayName: 'NPWPD',
+                      },
+                      {
+                        id: 'jenis_reklame',
+                        displayName: 'Jenis Objek',
+                      },
+                      {
+                        id: 'lokasi_pemasangan',
+                        displayName: 'Lokasi Pemasangan',
+                      },
+                      {
+                        id: 'nama_wajib_pajak',
+                        displayName: 'Nama Wajib Pajak',
+                      },
+                      {
+                        id: 'nominal',
+                        displayName: 'Nominal',
+                      },
+                      {
+                        id: 'tanggal_jatuh_tempo',
+                        displayName: 'Tanggal Jatuh Tempo',
+                      },
+                      {
+                        id: 'periode',
+                        displayName: 'Periode',
+                      },
+                      {
+                        id: 'status',
+                        displayName: 'Status',
+                      },
+                    ]}
+                    datas={reklame}
+                  >
+                    <CButton color="danger" className="float-end me-3">
+                      <CIcon icon={cilCloudDownload} /> Unduh Laporan
+                    </CButton>
+                  </CsvDownloader>
+                </CCol>
+                <br />
+              </CRow>
+              <CRow>
                 <CCol sm={5} className="d-none d-md-block">
                   <CInputGroup>
                     <CFormInput
-                      placeholder="Cari npwpd..."
+                      placeholder="Cari NPWPD..."
                       className="mx-0"
                       onChange={(e) => {
                         setNpwpdFilter(e.target.value)
@@ -553,4 +771,5 @@ export default function TableList({ jenisPajak }) {
 
 TableList.propTypes = {
   jenisPajak: PropTypes.string,
+  icon: PropTypes.any,
 }

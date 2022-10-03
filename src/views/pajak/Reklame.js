@@ -4,6 +4,7 @@ import 'react-date-range/dist/theme/default.css' // theme css file
 import _ from 'lodash'
 import TableList from '../reusable/TableList'
 import { Helmet } from 'react-helmet'
+import { cilAirplay } from '@coreui/icons'
 
 const Reklame = () => {
   return (
@@ -11,7 +12,7 @@ const Reklame = () => {
       <Helmet>
         <title>Reklame | Penerimaan Pendapatan Asli Daerah Kabupaten Bangli</title>
       </Helmet>
-      <TableList jenisPajak={'Reklame'} />
+      <TableList jenisPajak={'Reklame'} icon={cilAirplay} />
     </>
   )
 }
