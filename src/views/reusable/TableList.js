@@ -55,7 +55,6 @@ export default function TableList({ jenisPajak, icon }) {
   const [countIzinKadaluarsa, setCountIzinKadaluarsa] = useState(0)
   const toaster = useRef()
   const today = new Date()
-  const twoMonthAgo = new Date(today.setMonth(today.getMonth() - 2))
   const [selectionRange, setSelectionRange] = useState([
     {
       startDate: today,
@@ -66,7 +65,6 @@ export default function TableList({ jenisPajak, icon }) {
   const [reset, setReset] = useState(true)
 
   function fetchData(status, npwpd, date) {
-    console.log(date)
     setLoad(true)
     let query =
       'http://maiharta.ddns.net:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
@@ -78,7 +76,6 @@ export default function TableList({ jenisPajak, icon }) {
           filter = { ...filter, npwpd: npwpd }
         }
         const reklames = _.filter(res.data.data, filter)
-        console.log(reklames)
         let data = []
         const inpStart = selectionRange[0].startDate
         const inpEnd = selectionRange[0].endDate

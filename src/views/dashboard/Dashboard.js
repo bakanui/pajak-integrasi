@@ -52,6 +52,7 @@ import {
   cilDrop,
   cilRoom,
   cilLightbulb,
+  cilGlobeAlt,
 } from '@coreui/icons'
 import axios from 'axios'
 import _ from 'lodash'
@@ -728,6 +729,65 @@ const Dashboard = () => {
               <CCardBody>
                 <CCardTitle className="text-center">
                   <CIcon icon={cilLightbulb} height={52} className="my-4 text-black" />
+                </CCardTitle>
+                <CCardText>
+                  <div className="bd-example">
+                    <dl className="row">
+                      <dt className="col-sm-4">Target</dt>
+                      <dd className="col-sm-8">
+                        <CurrencyFormat
+                          value={peneranganJalanTarget}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={'Rp '}
+                        />
+                      </dd>
+                    </dl>
+                    <dl className="row">
+                      <dt className="col-sm-4">Realisasi</dt>
+                      <dd className="col-sm-8">
+                        <CurrencyFormat
+                          value={peneranganJalanRealisasi}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={'Rp '}
+                        />
+                      </dd>
+                    </dl>
+                    <dl className="row">
+                      <dt className="col-sm-4">Sisa Target</dt>
+                      <dd className="col-sm-8">
+                        <CurrencyFormat
+                          value={peneranganJalanSisaTarget}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={'Rp '}
+                        />
+                      </dd>
+                    </dl>
+                    <dl className="row">
+                      <dt className="col-sm-4">Realisasi Hari Ini</dt>
+                      <dd className="col-sm-8">
+                        <CurrencyFormat
+                          value={peneranganJalanRealisasiHariIni}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={'Rp '}
+                        />
+                      </dd>
+                    </dl>
+                  </div>
+                </CCardText>
+              </CCardBody>
+            </CCard>
+          </CCol>
+          {/* pbb */}
+          <CCol xs={6} md={4}>
+            <CCard className="mb-4 border-top-info border-top-3">
+              <CCardHeader className="text-center">Bumi & Bangunan</CCardHeader>
+              <CCardBody>
+                <CCardTitle className="text-center">
+                  <CIcon icon={cilGlobeAlt} height={52} className="my-4 text-black" />
                 </CCardTitle>
                 <CCardText>
                   <div className="bd-example">
