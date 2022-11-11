@@ -13,13 +13,33 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
-import navigation from '../_nav'
+import airtanah from '../_nav_Air_Tanah'
+import hiburan from '../_nav_Hiburan'
+import pbb from '../_nav_Pbb'
+import peneranganjalan from '../_nav_Penerangan_Jalan'
+import reklame from '../_nav_Reklame'
+import satpolpp from '../_nav'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
-
+  const navGetter = (username) => {
+    switch (username) {
+      case 'admin_pbb':
+        return <AppSidebarNav items={pbb} />
+      case 'admin_Reklame':
+        return <AppSidebarNav items={reklame} />
+      case 'admin_air_tanah':
+        return <AppSidebarNav items={airtanah} />
+      case 'admin_hiburan':
+        return <AppSidebarNav items={hiburan} />
+      case 'admin_penerangan_jalan':
+        return <AppSidebarNav items={peneranganjalan} />
+      case 'admin_satpol_pp':
+        return <AppSidebarNav items={satpolpp} />
+    }
+  }
   return (
     <CSidebar
       position="fixed"
@@ -34,9 +54,7 @@ const AppSidebar = () => {
         <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
       </CSidebarBrand>
       <CSidebarNav>
-        <SimpleBar>
-          <AppSidebarNav items={navigation} />
-        </SimpleBar>
+        <SimpleBar>{navGetter(localStorage.getItem('username'))}</SimpleBar>
       </CSidebarNav>
     </CSidebar>
   )
