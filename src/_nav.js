@@ -18,6 +18,12 @@ const _nav = [
     icon: <CIcon icon={cilViewQuilt} customClassName="nav-icon" />,
   },
   {
+    component: CNavItem,
+    name: 'Pengawasan',
+    to: '/pengawasan',
+    icon: <CIcon icon={cilViewQuilt} customClassName="nav-icon" />,
+  },
+  {
     component: CNavTitle,
     name: 'Tagihan',
   },

@@ -8,10 +8,12 @@ const Reklame = React.lazy(() => import('./views/pajak/Reklame'))
 const Hiburan = React.lazy(() => import('./views/pajak/Hiburan'))
 const AirTanah = React.lazy(() => import('./views/pajak/AirTanah'))
 const PeneranganJalan = React.lazy(() => import('./views/pajak/PeneranganJalan'))
+const Pengawasan = React.lazy(() => import('./views/pengawasan/Pengawasan'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  { path: '/pengawasan', name: 'Pengawasan', element: Pengawasan },
   { path: '/pajak/pbb', name: 'Pajak Bumi dan Bangunan', element: PBB },
   { path: '/pajak/reklame', name: 'Pajak Reklame', element: Reklame },
   { path: '/pajak/hiburan', name: 'Pajak Hiburan', element: Hiburan },

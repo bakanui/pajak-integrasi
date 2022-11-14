@@ -67,7 +67,7 @@ export default function TableList({ jenisPajak, icon }) {
   function fetchData(status, npwpd, date) {
     setLoad(true)
     let query =
-      'http://maiharta.ddns.net:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+      'http://192.168.18.42:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
     axios
       .get(query)
       .then((res) => {
@@ -612,9 +612,6 @@ export default function TableList({ jenisPajak, icon }) {
                   </CButtonGroup>
                 </CCol>
                 <CCol sm={5} className="d-none d-md-block">
-                  {/* <CButton color="danger" className="float-end me-3">
-                    <CIcon icon={cilCloudDownload} /> Unduh Laporan
-                  </CButton> */}
                   <CsvDownloader
                     filename={(() => {
                       if (reset) {

@@ -1,14 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
 import {
-  CAvatar,
   CButton,
   CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
   CTable,
   CTableBody,
@@ -17,12 +14,8 @@ import {
   CTableHeaderCell,
   CTableRow,
   CContainer,
-  CWidgetStatsC,
-  CWidgetStatsD,
-  CCardGroup,
   CCardText,
   CCardTitle,
-  CCardImage,
   CToast,
   CToastHeader,
   CToastBody,
@@ -31,23 +24,10 @@ import {
   CDropdownToggle,
   CDropdownMenu,
 } from '@coreui/react'
-import { CChartLine } from '@coreui/react-chartjs'
-import { getStyle, hexToRgba } from '@coreui/utils'
 import CIcon from '@coreui/icons-react'
-import imgReact from '../../assets/images/react.jpg'
 import {
   cilWarning,
-  cilSearch,
-  cilFilter,
   cilSettings,
-  cilChartPie,
-  cilUser,
-  cibTwitter,
-  cilCloudDownload,
-  cilPeople,
-  cilUserFollow,
-  cilBasket,
-  cilSpeedometer,
   cilAirplay,
   cilDrop,
   cilRoom,
@@ -62,9 +42,7 @@ import { Helmet } from 'react-helmet'
 import { DateRangePicker } from 'react-date-range'
 
 const Dashboard = () => {
-  const [selectAll, setSelectAll] = useState(false)
   const [kadalFilter, setKadalFilter] = useState('Akan Kadaluarsa')
-  const [reklame, setReklame] = useState([])
   const [akanKadaluarsa, setAkanKadaluarsa] = useState([])
   const [sudahKadaluarsa, setSudahKadaluarsa] = useState([])
   const [load, setLoad] = useState(true)
@@ -109,7 +87,7 @@ const Dashboard = () => {
   function fetchData() {
     setLoad(true)
     let query =
-      'http://maiharta.ddns.net:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+      'http://192.168.18.42:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
     axios
       .get(query)
       .then((res) => {
@@ -124,7 +102,6 @@ const Dashboard = () => {
         const inpEnd = selectionRange[0].endDate
         const start = new Date(inpStart.setDate(inpStart.getDate() - 1))
         const end = new Date(inpEnd.setDate(inpEnd.getDate() + 1))
-        console.log(end)
         data.map((rek) => {
           let singular = {}
           if (rek.ketetapan.length !== 0) {
