@@ -8,12 +8,20 @@ const Reklame = React.lazy(() => import('./views/pajak/Reklame'))
 const Hiburan = React.lazy(() => import('./views/pajak/Hiburan'))
 const AirTanah = React.lazy(() => import('./views/pajak/AirTanah'))
 const PeneranganJalan = React.lazy(() => import('./views/pajak/PeneranganJalan'))
-const Pengawasan = React.lazy(() => import('./views/pengawasan/Pengawasan'))
+
+//Pengawasan Reklame
+const Pengawasan = React.lazy(() => import('./views/pengawasan/IzinHabis'))
+const PengawasanReklame = React.lazy(() => import('./views/pengawasan/PencabutanReklame'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/pengawasan', name: 'Pengawasan', element: Pengawasan },
+  { path: '/pengawasan/izin-habis', name: 'Reklame Izin Habis', element: Pengawasan },
+  {
+    path: '/pengawasan/pencabutan-reklame',
+    name: 'Jadwal Pencabutan Reklame',
+    element: PengawasanReklame,
+  },
   { path: '/pajak/pbb', name: 'Pajak Bumi dan Bangunan', element: PBB },
   { path: '/pajak/reklame', name: 'Pajak Reklame', element: Reklame },
   { path: '/pajak/hiburan', name: 'Pajak Hiburan', element: Hiburan },

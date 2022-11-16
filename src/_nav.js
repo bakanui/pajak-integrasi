@@ -7,8 +7,9 @@ import {
   cilGlobeAlt,
   cilLightbulb,
   cilViewQuilt,
+  cilBalanceScale,
 } from '@coreui/icons'
-import { CNavItem, CNavTitle } from '@coreui/react'
+import { CNavItem, CNavTitle, CNavGroup } from '@coreui/react'
 
 const _nav = [
   {
@@ -18,10 +19,22 @@ const _nav = [
     icon: <CIcon icon={cilViewQuilt} customClassName="nav-icon" />,
   },
   {
-    component: CNavItem,
-    name: 'Pengawasan',
+    component: CNavGroup,
+    name: 'Pengawasan Reklame',
     to: '/pengawasan',
-    icon: <CIcon icon={cilViewQuilt} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilBalanceScale} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Izin Habis',
+        to: '/pengawasan/izin-habis',
+      },
+      {
+        component: CNavItem,
+        name: 'Pencabutan Reklame',
+        to: '/pengawasan/pencabutan-reklame',
+      },
+    ],
   },
   {
     component: CNavTitle,

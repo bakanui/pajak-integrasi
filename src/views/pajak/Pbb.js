@@ -98,7 +98,7 @@ const PBB = () => {
   function fetchData(nop) {
     setLoad(true)
     let query =
-      'http://192.168.18.42:3100/http://36.94.200.157:40200/revenue/tax/property/report/penerimaan/reportevaluasipenerimaan'
+      'http://maiharta.ddns.net:3100/http://36.94.200.157:40200/revenue/tax/property/report/penerimaan/reportevaluasipenerimaan'
     const headers = {
       headers: {
         'cti-auth-token':

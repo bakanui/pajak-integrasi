@@ -40,6 +40,12 @@ import { format } from 'date-fns'
 import CurrencyFormat from 'react-currency-format'
 import { Helmet } from 'react-helmet'
 import { DateRangePicker } from 'react-date-range'
+import Reklame from '../../assets/images/reklame.png'
+import Semua from '../../assets/images/semua.png'
+import Air from '../../assets/images/akar-icons_water.png'
+import Hiburan from '../../assets/images/bx_party.png'
+import Penerangan from '../../assets/images/mdi_coach-lamp.png'
+import Bumi from '../../assets/images/bx_building-house.png'
 
 const Dashboard = () => {
   const [kadalFilter, setKadalFilter] = useState('Akan Kadaluarsa')
@@ -83,11 +89,16 @@ const Dashboard = () => {
   const [peneranganJalanRealisasi, setPeneranganJalanRealisasi] = useState(0)
   const [peneranganJalanSisaTarget, setPeneranganJalanSisaTarget] = useState(0)
   const [peneranganJalanRealisasiHariIni, setPeneranganJalanRealisasiHariIni] = useState(0)
+  //PBB
+  const [bumiTarget, setBumiTarget] = useState(0)
+  const [bumiRealisasi, setBumiRealisasi] = useState(0)
+  const [bumiSisaTarget, setBumiSisaTarget] = useState(0)
+  const [bumiRealisasiHariIni, setBumiRealisasiHariIni] = useState(0)
 
   function fetchData() {
     setLoad(true)
     let query =
-      'http://192.168.18.42:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+      'http://maiharta.ddns.net:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
     axios
       .get(query)
       .then((res) => {
@@ -452,7 +463,7 @@ const Dashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Dashboard | Penerimaan Pendapatan Asli Daerah Kabupaten Bangli</title>
+        <title>Dashboard | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
       </Helmet>
       <CContainer>
         <CRow>
@@ -464,354 +475,383 @@ const Dashboard = () => {
       <CContainer>
         <CRow>
           {/* semua */}
-          <CCol xs={6} md={4}>
-            <CCard className="mb-4 border-top-danger border-top-3">
-              <CCardHeader className="text-center">Semua</CCardHeader>
+          <CCol md={9}>
+            <CCard className="mb-4 text-white" color="danger">
               <CCardBody>
-                <CCardTitle className="text-center">
-                  <CIcon icon={cilSettings} height={52} className="my-4 text-black" />
-                </CCardTitle>
                 <CCardText>
-                  <div className="bd-example">
-                    <dl className="row">
-                      <dt className="col-sm-4">Target</dt>
-                      <dd className="col-sm-8">
-                        <CurrencyFormat
-                          value={semuaTarget}
-                          displayType={'text'}
-                          thousandSeparator={true}
-                          prefix={'Rp '}
-                        />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi</dt>
-                      <dd className="col-sm-8">
-                        <CurrencyFormat
-                          value={semuaRealisasi}
-                          displayType={'text'}
-                          thousandSeparator={true}
-                          prefix={'Rp '}
-                        />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Sisa Target</dt>
-                      <dd className="col-sm-8">
-                        <CurrencyFormat
-                          value={semuaSisaTarget}
-                          displayType={'text'}
-                          thousandSeparator={true}
-                          prefix={'Rp '}
-                        />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi Hari Ini</dt>
-                      <dd className="col-sm-8">
-                        <CurrencyFormat
-                          value={semuaRealisasiHariIni}
-                          displayType={'text'}
-                          thousandSeparator={true}
-                          prefix={'Rp '}
-                        />
-                      </dd>
-                    </dl>
+                  <CRow>
+                    <CCol>
+                      <h4 id="traffic" className="card-title mb-4">
+                        Laporan Target dan Realisasi
+                      </h4>
+                    </CCol>
+                  </CRow>
+                  <div className="row">
+                    <div style={{ display: 'flex', justifyContent: 'center' }} className="col-sm-4">
+                      <img src={Semua}></img>
+                    </div>
+                    <div className="col-sm-8">
+                      <div className="row">
+                        <div className="col-sm-6">
+                          <p>Total Target</p>
+                          <h2>
+                            <CurrencyFormat
+                              value={semuaTarget}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              // prefix={'Rp '}
+                            />
+                          </h2>
+                        </div>
+                        <div className="col-sm-6">
+                          <p>Realisasi</p>
+                          <h2>
+                            <CurrencyFormat
+                              value={semuaRealisasi}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              // prefix={'Rp '}
+                            />
+                          </h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-4"></div>
+                    <div className="col-sm-8">
+                      <div className="row">
+                        <div className="col-sm-6">
+                          <p>Sisa Target</p>
+                          <h2>
+                            <CurrencyFormat
+                              value={semuaSisaTarget}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              // prefix={'Rp '}
+                            />
+                          </h2>
+                        </div>
+                        <div className="col-sm-6">
+                          <p>Realisasi Hari Ini</p>
+                          <h2>
+                            <CurrencyFormat
+                              value={semuaRealisasiHariIni}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              // prefix={'Rp '}
+                            />
+                          </h2>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </CCardText>
               </CCardBody>
             </CCard>
           </CCol>
           {/* reklame */}
-          <CCol xs={6} md={4}>
-            <CCard className="mb-4 border-top-info border-top-3">
-              <CCardHeader className="text-center">Reklame</CCardHeader>
+          <CCol md={3}>
+            <CCard className="mb-4">
+              <CCardHeader style={{ backgroundColor: '#FF7A00' }} className="go-left text-white">
+                &nbsp;&nbsp;<img src={Reklame}></img>&nbsp;&nbsp;Pajak Reklame
+              </CCardHeader>
               <CCardBody>
-                <CCardTitle className="text-center">
+                {/* <CCardTitle className="text-center">
                   <CIcon icon={cilAirplay} height={52} className="my-4 text-black" />
-                </CCardTitle>
+                </CCardTitle> */}
                 <CCardText>
                   <div className="bd-example">
-                    <dl className="row">
-                      <dt className="col-sm-4">Target</dt>
-                      <dd className="col-sm-8">
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={reklameTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={reklameRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Sisa Target</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Sisa Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={reklameSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi Hari Ini</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi Hari Ini</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={reklameRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
+                      </h5>
+                    </div>
                   </div>
                 </CCardText>
               </CCardBody>
             </CCard>
           </CCol>
+        </CRow>
+        <CRow>
           {/* air tanah */}
-          <CCol xs={6} md={4}>
-            <CCard className="mb-4 border-top-info border-top-3">
-              <CCardHeader className="text-center">Air Tanah</CCardHeader>
+          <CCol md={3}>
+            <CCard className="mb-4">
+              <CCardHeader style={{ backgroundColor: '#097600' }} className="go-left text-white">
+                &nbsp;&nbsp;<img src={Air}></img>&nbsp;&nbsp;Pajak Air Tanah
+              </CCardHeader>
               <CCardBody>
-                <CCardTitle className="text-center">
-                  <CIcon icon={cilDrop} height={52} className="my-4 text-black" />
-                </CCardTitle>
+                {/* <CCardTitle className="text-center">
+                  <CIcon icon={cilAirplay} height={52} className="my-4 text-black" />
+                </CCardTitle> */}
                 <CCardText>
                   <div className="bd-example">
-                    <dl className="row">
-                      <dt className="col-sm-4">Target</dt>
-                      <dd className="col-sm-8">
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={airTanahTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={airTanahRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Sisa Target</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Sisa Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={airTanahSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi Hari Ini</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi Hari Ini</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={airTanahRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
+                      </h5>
+                    </div>
                   </div>
                 </CCardText>
               </CCardBody>
             </CCard>
           </CCol>
           {/* hiburan */}
-          <CCol xs={6} md={4}>
-            <CCard className="mb-4 border-top-info border-top-3">
-              <CCardHeader className="text-center">Hiburan</CCardHeader>
+          <CCol md={3}>
+            <CCard className="mb-4">
+              <CCardHeader style={{ backgroundColor: '#E553DF' }} className="go-left text-white">
+                &nbsp;&nbsp;<img src={Hiburan}></img>&nbsp;&nbsp;Pajak Hiburan
+              </CCardHeader>
               <CCardBody>
-                <CCardTitle className="text-center">
-                  <CIcon icon={cilRoom} height={52} className="my-4 text-black" />
-                </CCardTitle>
+                {/* <CCardTitle className="text-center">
+                  <CIcon icon={cilAirplay} height={52} className="my-4 text-black" />
+                </CCardTitle> */}
                 <CCardText>
                   <div className="bd-example">
-                    <dl className="row">
-                      <dt className="col-sm-4">Target</dt>
-                      <dd className="col-sm-8">
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={hiburanTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={hiburanRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Sisa Target</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Sisa Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={hiburanSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi Hari Ini</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi Hari Ini</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={hiburanRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
+                      </h5>
+                    </div>
                   </div>
                 </CCardText>
               </CCardBody>
             </CCard>
           </CCol>
           {/* penerangan jalan */}
-          <CCol xs={6} md={4}>
-            <CCard className="mb-4 border-top-info border-top-3">
-              <CCardHeader className="text-center">Penerangan Jalan</CCardHeader>
+          <CCol md={3}>
+            <CCard className="mb-4">
+              <CCardHeader style={{ backgroundColor: '#536AE5' }} className="go-left text-white">
+                &nbsp;&nbsp;<img src={Penerangan}></img>&nbsp;&nbsp;Pajak Penerangan Jalan
+              </CCardHeader>
               <CCardBody>
-                <CCardTitle className="text-center">
-                  <CIcon icon={cilLightbulb} height={52} className="my-4 text-black" />
-                </CCardTitle>
+                {/* <CCardTitle className="text-center">
+                  <CIcon icon={cilAirplay} height={52} className="my-4 text-black" />
+                </CCardTitle> */}
                 <CCardText>
                   <div className="bd-example">
-                    <dl className="row">
-                      <dt className="col-sm-4">Target</dt>
-                      <dd className="col-sm-8">
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={peneranganJalanTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={peneranganJalanRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Sisa Target</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Sisa Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={peneranganJalanSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi Hari Ini</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi Hari Ini</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={peneranganJalanRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
+                      </h5>
+                    </div>
                   </div>
                 </CCardText>
               </CCardBody>
             </CCard>
           </CCol>
           {/* pbb */}
-          <CCol xs={6} md={4}>
-            <CCard className="mb-4 border-top-info border-top-3">
-              <CCardHeader className="text-center">Bumi & Bangunan</CCardHeader>
+          <CCol md={3}>
+            <CCard className="mb-4">
+              <CCardHeader style={{ backgroundColor: '#693E2F' }} className="go-left text-white">
+                &nbsp;&nbsp;<img src={Bumi}></img>&nbsp;&nbsp;Pajak Bumi Bangunan
+              </CCardHeader>
               <CCardBody>
-                <CCardTitle className="text-center">
-                  <CIcon icon={cilGlobeAlt} height={52} className="my-4 text-black" />
-                </CCardTitle>
+                {/* <CCardTitle className="text-center">
+                  <CIcon icon={cilAirplay} height={52} className="my-4 text-black" />
+                </CCardTitle> */}
                 <CCardText>
                   <div className="bd-example">
-                    <dl className="row">
-                      <dt className="col-sm-4">Target</dt>
-                      <dd className="col-sm-8">
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
-                          value={peneranganJalanTarget}
+                          value={bumiTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
-                          value={peneranganJalanRealisasi}
+                          value={bumiRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Sisa Target</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Sisa Target</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
-                          value={peneranganJalanSisaTarget}
+                          value={bumiSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
-                    <dl className="row">
-                      <dt className="col-sm-4">Realisasi Hari Ini</dt>
-                      <dd className="col-sm-8">
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi Hari Ini</h6>
+                      <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
-                          value={peneranganJalanRealisasiHariIni}
+                          value={bumiRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          prefix={'Rp '}
+                          // prefix={'Rp '}
                         />
-                      </dd>
-                    </dl>
+                      </h5>
+                    </div>
                   </div>
                 </CCardText>
               </CCardBody>

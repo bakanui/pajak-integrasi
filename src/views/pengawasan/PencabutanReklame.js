@@ -32,6 +32,7 @@ import {
   CForm,
   CFormLabel,
   CModalFooter,
+  CInputGroupText,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -52,11 +53,10 @@ import { Calendar } from 'react-date-range'
 import CsvDownloader from 'react-csv-downloader'
 import { id } from 'react-date-range/dist/locale'
 
-const Pengawasan = () => {
+const PencabutanReklame = () => {
   const [load, setLoad] = useState(true)
   const [reklame, setReklame] = useState([])
   const [toast, addToast] = useState(0)
-  const [modal, setModal] = useState(false)
   const [modal2, setModal2] = useState(false)
   const [ketetapan, setKetetapan] = useState([])
   const statusFilter = 'Ijin Kadaluarsa'
@@ -76,118 +76,11 @@ const Pengawasan = () => {
 
   function fetchData(status, npwpd, date) {
     setLoad(true)
-    let query =
-      'http://192.168.18.42:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+    let query = 'http://maiharta.ddns.net:5002/reklame'
     axios
       .get(query)
       .then((res) => {
-        let filter = { namaJenisPajak: 'Pajak ' + jenisPajak }
-        if (npwpd !== '') {
-          filter = { ...filter, npwpd: npwpd }
-        }
-        const reklames = _.filter(res.data.data, filter)
-        let data = []
-        const inpStart = selectionRange[0].startDate
-        const inpEnd = selectionRange[0].endDate
-        const start = new Date(inpStart.setDate(inpStart.getDate() - 1))
-        const end = new Date(inpEnd.setDate(inpEnd.getDate() + 1))
-        reklames.map((rek) => {
-          let singular = {}
-          if (rek.ketetapan.length !== 0) {
-            rek.ketetapan.map((ket) => {
-              if (ket.periode.includes(',')) {
-                const multiPeriode = ket.periode.split(', ')
-                for (var i = 0; i < multiPeriode; i++) {
-                  const period = multiPeriode[i].split(' s/d ')
-                  const [startDay, startMonth, startYear] = period[0].split('-')
-                  const [endDay, endMonth, endYear] = period[1].split('-')
-                  let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
-                  let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
-                  const periode = [awal, akhir]
-                  if (date === false) {
-                    if (awal >= start && awal < end && akhir > start && akhir <= end) {
-                      if (akhir < today) {
-                        singular = {
-                          nomor: ket.nomor,
-                          npwpd: rek.npwpd,
-                          npwpdLama: rek.npwpdLama,
-                          jenis_reklame: rek.namaJenisPajakUsaha,
-                          lokasi_pemasangan: ket.lokasi,
-                          nama_wajib_pajak: rek.namaUsaha,
-                          nominal: ket.pokokPajak,
-                          tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                          periode: periode,
-                          status: 'Ijin Kadaluarsa',
-                        }
-                        data.push(singular)
-                      }
-                    }
-                  } else {
-                    if (akhir < today) {
-                      singular = {
-                        nomor: ket.nomor,
-                        npwpd: rek.npwpd,
-                        npwpdLama: rek.npwpdLama,
-                        jenis_reklame: rek.namaJenisPajakUsaha,
-                        lokasi_pemasangan: ket.lokasi,
-                        nama_wajib_pajak: rek.namaUsaha,
-                        nominal: ket.pokokPajak,
-                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                        periode: periode,
-                        status: 'Ijin Kadaluarsa',
-                      }
-                      data.push(singular)
-                    }
-                  }
-                }
-              } else {
-                const period = ket.periode.split(' s/d ')
-                const [startDay, startMonth, startYear] = period[0].split('-')
-                const [endDay, endMonth, endYear] = period[1].split('-')
-                let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
-                let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
-                const periode = [awal, akhir]
-                if (date === false) {
-                  if (awal >= start && awal < end && akhir > start && akhir <= end) {
-                    if (akhir < today) {
-                      singular = {
-                        nomor: ket.nomor,
-                        npwpd: rek.npwpd,
-                        npwpdLama: rek.npwpdLama,
-                        jenis_reklame: rek.namaJenisPajakUsaha,
-                        lokasi_pemasangan: ket.lokasi,
-                        nama_wajib_pajak: rek.namaUsaha,
-                        nominal: ket.pokokPajak,
-                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                        periode: periode,
-                        status: 'Ijin Kadaluarsa',
-                      }
-                      return data.push(singular)
-                    }
-                  }
-                } else {
-                  if (akhir < today) {
-                    singular = {
-                      nomor: ket.nomor,
-                      npwpd: rek.npwpd,
-                      npwpdLama: rek.npwpdLama,
-                      jenis_reklame: rek.namaJenisPajakUsaha,
-                      lokasi_pemasangan: ket.lokasi,
-                      nama_wajib_pajak: rek.namaUsaha,
-                      nominal: ket.pokokPajak,
-                      tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                      periode: periode,
-                      status: 'Ijin Kadaluarsa',
-                    }
-                    return data.push(singular)
-                  }
-                }
-              }
-            })
-          }
-        })
-        const kadaluarsa = _.filter(data, { status: status })
-        setReklame(kadaluarsa)
+        setReklame(res.data)
         setLoad(false)
       })
       .catch((error) => {
@@ -236,33 +129,23 @@ const Pengawasan = () => {
             </CTableDataCell>
             <CTableDataCell>
               <div>{item.nama_wajib_pajak}</div>
-              <div className="small text-medium-emphasis">
-                NPWPD: <span>{item.npwpd}</span>
-              </div>
             </CTableDataCell>
             <CTableDataCell>
-              <div>{item.jenis_reklame}</div>
+              <div>{item.jenis}</div>
             </CTableDataCell>
             <CTableDataCell>
               <div>{item.lokasi_pemasangan}</div>
             </CTableDataCell>
             <CTableDataCell>
-              {item.tanggal_jatuh_tempo !== 'N/A' ? (
-                <div>{format(new Date(item.tanggal_jatuh_tempo), 'dd MMMM yyyy')}</div>
+              {item.tanggal_rencana_dicopot !== 'N/A' ? (
+                <div>{format(new Date(item.tanggal_rencana_dicopot), 'dd MMMM yyyy')}</div>
               ) : (
                 'N/A'
               )}
             </CTableDataCell>
+            <CTableDataCell>{badgeSelector(item.status)}</CTableDataCell>
             <CTableDataCell>
-              {item.tanggal_jatuh_tempo !== 'N/A' ? (
-                <div>{format(new Date(item.tanggal_jatuh_tempo), 'dd MMMM yyyy')}</div>
-              ) : (
-                'N/A'
-              )}
-            </CTableDataCell>
-            <CTableDataCell>{badgeSelector('Ijin Kadaluarsa')}</CTableDataCell>
-            <CTableDataCell>
-              <CButton className="text-white" color="danger" onClick={() => setModal(!modal)}>
+              <CButton className="text-white" color="danger" onClick={() => setModal2(!modal2)}>
                 Aksi
               </CButton>
             </CTableDataCell>
@@ -280,7 +163,6 @@ const Pengawasan = () => {
                   <p>No data</p>
                 </div>
               </CTableDataCell>
-              <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
               {/* <CTableDataCell></CTableDataCell> */}
@@ -350,7 +232,7 @@ const Pengawasan = () => {
       <CContainer>
         <CRow>
           <CCol className="titleHead">
-            <h2>{jenisPajak} dengan Izin Habis</h2>
+            <h2>Jadwal Pencabutan Reklame</h2>
           </CCol>
         </CRow>
       </CContainer>
@@ -362,7 +244,7 @@ const Pengawasan = () => {
                 <CCol sm={5} className="d-none d-md-block">
                   <CInputGroup>
                     <CFormInput
-                      placeholder="Cari NPWPD..."
+                      placeholder="Cari Nomor..."
                       className="mx-0"
                       onChange={(e) => {
                         setNpwpdFilter(e.target.value)
@@ -454,7 +336,6 @@ const Pengawasan = () => {
                     <CTableHeaderCell>Nama Wajib Pajak</CTableHeaderCell>
                     <CTableHeaderCell>Jenis</CTableHeaderCell>
                     <CTableHeaderCell>Lokasi Pemasangan</CTableHeaderCell>
-                    <CTableHeaderCell>Tanggal Jatuh Tempo</CTableHeaderCell>
                     <CTableHeaderCell>Tanggal Pencabutan</CTableHeaderCell>
                     <CTableHeaderCell>Status</CTableHeaderCell>
                     <CTableHeaderCell></CTableHeaderCell>
@@ -463,50 +344,29 @@ const Pengawasan = () => {
                 <CTableBody>{tableContents(reklame, ketetapan, setKetetapan)}</CTableBody>
               </CTable>
             </CCardBody>
-            {/* {DetailModal(modal, setModal)} */}
-            <CModal visible={modal} onClose={() => setModal(false)}>
+            <CModal visible={modal2} onClose={() => setModal2(false)}>
               <CModalHeader>
-                <CModalTitle>Aksi</CModalTitle>
+                <CModalTitle>Sudah Dicabut</CModalTitle>
               </CModalHeader>
               <CModalBody>
                 <CForm>
                   <CRow className="mb-3">
                     <CFormLabel htmlFor="inputEmail3" className="col-sm-5 col-form-label">
-                      Tanggal Akan Dicabut
+                      Foto Bukti Pencabutan
                     </CFormLabel>
                     <CCol sm={7}>
-                      <CDropdown variant="btn-group">
-                        <CButton variant="outline" color="dark" disabled>
-                          {format(new Date(date), 'dd MMMM yyyy')}
-                        </CButton>
-                        <CDropdownToggle variant="outline" color="secondary" />
-                        <CDropdownMenu>
-                          <Calendar onChange={(item) => setDate(item)} locale={id} date={date} />
-                        </CDropdownMenu>
-                      </CDropdown>
+                      <CInputGroup className="mb-3">
+                        <CFormInput type="file" id="inputGroupFile02" />
+                      </CInputGroup>
                     </CCol>
                   </CRow>
                 </CForm>
               </CModalBody>
               <CModalFooter>
-                <CButton color="secondary" onClick={() => setModal(false)}>
+                <CButton color="secondary" onClick={() => setModal2(false)}>
                   Batalkan
                 </CButton>
-                <CButton className="text-white" color="danger">
-                  Simpan tanggal
-                </CButton>
-              </CModalFooter>
-            </CModal>
-            <CModal visible={modal2} onClose={() => setModal2(false)}>
-              <CModalHeader>
-                <CModalTitle>Modal title</CModalTitle>
-              </CModalHeader>
-              <CModalBody>Woohoo, you&#39;re reading this text in a modal!</CModalBody>
-              <CModalFooter>
-                <CButton color="secondary" onClick={() => setModal2(false)}>
-                  Close
-                </CButton>
-                <CButton color="primary">Save changes</CButton>
+                <CButton color="primary">Unggah Foto</CButton>
               </CModalFooter>
             </CModal>
           </CCard>
@@ -516,4 +376,4 @@ const Pengawasan = () => {
   )
 }
 
-export default Pengawasan
+export default PencabutanReklame

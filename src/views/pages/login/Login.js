@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   CButton,
@@ -91,6 +91,14 @@ const Login = () => {
       addToast(errorToast)
     }
   }
+
+  const isLoggedIn = localStorage.getItem('isLoggedIn')
+
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      navigate('/dashboard')
+    }
+  })
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CToaster ref={toaster} push={toast} placement="top-end" />
@@ -135,6 +143,7 @@ const Login = () => {
                           className="px-4 text-white"
                           onClick={() => {
                             submitHandler()
+                            window.location.reload(false)
                           }}
                         >
                           Masuk
