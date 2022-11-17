@@ -52,6 +52,7 @@ import { format } from 'date-fns'
 import { Calendar } from 'react-date-range'
 import CsvDownloader from 'react-csv-downloader'
 import { id } from 'react-date-range/dist/locale'
+import { Helmet } from 'react-helmet'
 
 const PencabutanReklame = () => {
   const [load, setLoad] = useState(true)
@@ -228,6 +229,9 @@ const PencabutanReklame = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Jadwal Pencabutan Reklame | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
+      </Helmet>
       <CToaster ref={toaster} push={toast} placement="top-end" />
       <CContainer>
         <CRow>

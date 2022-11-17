@@ -222,7 +222,7 @@ const PBB = () => {
   return (
     <>
       <Helmet>
-        <title>Bumi & Bangunan | Penerimaan Pendapatan Asli Daerah Kabupaten Bangli</title>
+        <title>Bumi & Bangunan | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
       </Helmet>
       <CToaster ref={toaster} push={toast} placement="top-end" />
       <CContainer>

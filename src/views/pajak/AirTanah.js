@@ -10,7 +10,7 @@ const AirTanah = () => {
   return (
     <>
       <Helmet>
-        <title>Air Tanah | Penerimaan Pendapatan Asli Daerah Kabupaten Bangli</title>
+        <title>Air Tanah | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
       </Helmet>
       <TableList jenisPajak={'Air Tanah'} icon={cilDrop} />
     </>

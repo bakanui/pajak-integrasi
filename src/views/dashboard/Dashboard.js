@@ -15,7 +15,6 @@ import {
   CTableRow,
   CContainer,
   CCardText,
-  CCardTitle,
   CToast,
   CToastHeader,
   CToastBody,
@@ -25,15 +24,7 @@ import {
   CDropdownMenu,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {
-  cilWarning,
-  cilSettings,
-  cilAirplay,
-  cilDrop,
-  cilRoom,
-  cilLightbulb,
-  cilGlobeAlt,
-} from '@coreui/icons'
+import { cilWarning } from '@coreui/icons'
 import axios from 'axios'
 import _ from 'lodash'
 import { format } from 'date-fns'
@@ -363,6 +354,34 @@ const Dashboard = () => {
       })
   }
 
+  function fetchPbb() {
+    let query =
+      'http://maiharta.ddns.net:3100/http://36.94.200.157:40200/revenue/tax/property/report/penerimaan/reportevaluasipenerimaan'
+    const headers = {
+      headers: {
+        'cti-auth-token':
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJ1aWQiOjMsImlhdCI6MTY0Njg4Njc4N30.VoRRzR27SJTle5YgJO53K-PGwddGAZaNKdeF40NswljDnSXQ3W8YYMh4EPfRmT_nFV4yZr1dn00gxAMJTQkoqXEHhzyk0k2Wqhb2AGkedeWwIuGYCw8UJ0-2Lf_nSWimwNUR0-ZRfaIHoWcI85oKj2dTHQ73eTTkr_CjQdqDXf9P3ylWeJj00tpcRg_iWzbejZ9dNRY62qwk47bZkOZms087_0xQi9N653WAlQmCnF-oZTRAruMTDm0CjN3zqUj_yW4DkNBpsIrrADyQn-Z49kbxIKfQjZjUaKMLor6ECnadme5EB8W8mK04Hx2EMY4-IN4ceKRY1VRMCU4ho17uKA',
+      },
+    }
+    const data = {
+      98010284: '51',
+      98010225: '06',
+      98011120: '2022',
+      98011267: '1',
+      98011268: '10000',
+      98011244: '01/11/2022 00:00:00 +0000',
+      98011245: '01/12/2022 00:00:00 +0000',
+    }
+    axios.post(query, data, headers).then((res) => {
+      let total = 0
+      res.data.data.map((r, index) => {
+        total = total + r.jmlPbbYgDibayar
+      })
+      setBumiTarget(total)
+      setBumiRealisasi(total)
+    })
+  }
+
   const tableContents = (tableData) => {
     if (load === true) {
       return (
@@ -458,6 +477,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData()
+    fetchPbb()
   }, [])
 
   return (
@@ -800,7 +820,7 @@ const Dashboard = () => {
           <CCol md={3}>
             <CCard className="mb-4">
               <CCardHeader style={{ backgroundColor: '#693E2F' }} className="go-left text-white">
-                &nbsp;&nbsp;<img src={Bumi}></img>&nbsp;&nbsp;Pajak Bumi Bangunan
+                &nbsp;&nbsp;<img src={Bumi}></img>&nbsp;&nbsp;Pajak Bumi & Bangunan
               </CCardHeader>
               <CCardBody>
                 {/* <CCardTitle className="text-center">

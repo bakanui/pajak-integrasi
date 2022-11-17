@@ -10,7 +10,7 @@ const PeneranganJalan = () => {
   return (
     <>
       <Helmet>
-        <title>Penerangan Jalan | Penerimaan Pendapatan Asli Daerah Kabupaten Bangli</title>
+        <title>Penerangan Jalan | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
       </Helmet>
       <TableList jenisPajak={'Penerangan Jalan'} icon={cilLightbulb} />
     </>

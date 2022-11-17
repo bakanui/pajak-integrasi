@@ -52,6 +52,7 @@ import { format } from 'date-fns'
 import { Calendar } from 'react-date-range'
 import CsvDownloader from 'react-csv-downloader'
 import { id } from 'react-date-range/dist/locale'
+import { Helmet } from 'react-helmet'
 
 const IzinHabis = () => {
   const [load, setLoad] = useState(true)
@@ -377,6 +378,9 @@ const IzinHabis = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Reklame Izin Habis | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
+      </Helmet>
       <CToaster ref={toaster} push={toast} placement="top-end" />
       <CContainer>
         <CRow>

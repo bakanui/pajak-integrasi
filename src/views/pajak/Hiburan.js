@@ -10,7 +10,7 @@ const Hiburan = () => {
   return (
     <>
       <Helmet>
-        <title>Hiburan | Penerimaan Pendapatan Asli Daerah Kabupaten Bangli</title>
+        <title>Hiburan | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
       </Helmet>
       <TableList jenisPajak={'Hiburan'} icon={cilDoor} />
     </>
