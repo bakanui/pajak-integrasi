@@ -16,9 +16,11 @@ import {
   CToastHeader,
   CToastBody,
   CToaster,
+  CFormLabel,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser, cilWarning } from '@coreui/icons'
+import login from '../../../assets/images/Frame.png'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -100,60 +102,63 @@ const Login = () => {
     }
   })
   return (
-    <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+    <div className="bg-danger min-vh-100 d-flex flex-row align-items-center no-scroll">
       <CToaster ref={toaster} push={toast} placement="top-end" />
+      <div className="login no-scroll"></div>
       <CContainer>
-        <CRow className="justify-content-center">
-          <CCol md={8}>
-            <CCardGroup>
-              <CCard className="p-4">
-                <CCardBody>
-                  <CForm>
-                    <h1>Login</h1>
-                    <p className="text-medium-emphasis">Masuk menggunakan akun anda</p>
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilUser} />
-                      </CInputGroupText>
-                      <CFormInput
-                        placeholder="Masukkan username anda..."
-                        autoComplete="username"
-                        onChange={(e) => {
-                          setUsername(e.target.value)
+        <CRow>
+          {/* <div className="login"></div> */}
+          <CCol md={6} style={{ zIndex: 2 }}>
+            <h6 className="text-white">Selamat datang di</h6>
+            <h3 className="text-white">Aplikasi Pajak Terintegrasi</h3>
+            <h4 className="text-white">Kabupaten Bangli</h4>
+            <img src={login}></img>
+          </CCol>
+          <CCol md={6} className="login-right-side">
+            <div className="p-4">
+              <div>
+                <CForm>
+                  <h3 className="mb-5">Masuk ke akun Anda</h3>
+                  <div className="mb-3">
+                    <CFormLabel>Username</CFormLabel>
+                    <CFormInput
+                      // size="lg"
+                      placeholder="Masukkan username Anda..."
+                      autoComplete="username"
+                      onChange={(e) => {
+                        setUsername(e.target.value)
+                      }}
+                    />
+                  </div>
+                  <div className="mb-5">
+                    <CFormLabel>Password</CFormLabel>
+                    <CFormInput
+                      // size="lg"
+                      type="password"
+                      placeholder="Masukkan password Anda..."
+                      autoComplete="current-password"
+                      onChange={(e) => {
+                        setPassword(e.target.value)
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="d-grid">
+                      <CButton
+                        color="danger"
+                        className="px-4 text-white"
+                        onClick={() => {
+                          submitHandler()
+                          window.location.reload(false)
                         }}
-                      />
-                    </CInputGroup>
-                    <CInputGroup className="mb-4">
-                      <CInputGroupText>
-                        <CIcon icon={cilLockLocked} />
-                      </CInputGroupText>
-                      <CFormInput
-                        type="password"
-                        placeholder="Masukkan password anda..."
-                        autoComplete="current-password"
-                        onChange={(e) => {
-                          setPassword(e.target.value)
-                        }}
-                      />
-                    </CInputGroup>
-                    <CRow>
-                      <CCol xs={6}>
-                        <CButton
-                          color="danger"
-                          className="px-4 text-white"
-                          onClick={() => {
-                            submitHandler()
-                            window.location.reload(false)
-                          }}
-                        >
-                          Masuk
-                        </CButton>
-                      </CCol>
-                    </CRow>
-                  </CForm>
-                </CCardBody>
-              </CCard>
-            </CCardGroup>
+                      >
+                        Masuk
+                      </CButton>
+                    </div>
+                  </div>
+                </CForm>
+              </div>
+            </div>
           </CCol>
         </CRow>
       </CContainer>

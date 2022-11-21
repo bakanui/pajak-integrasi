@@ -1,6 +1,6 @@
 {
-  "short_name": "CoreUI-React",
-  "name": "CoreUI-React sample",
+  "short_name": "Pajak Terintegrasi",
+  "name": "Aplikasi Pajak Terintegrasi Kabupaten Bangli",
   "icons": [
     {
       "src": "./assets/img/favicon.png",

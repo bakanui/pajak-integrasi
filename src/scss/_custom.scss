@@ -26,3 +26,22 @@
 .go-left{
     text-align: left !important;
 }
+
+.login{
+    box-sizing: border-box;
+    position: fixed;
+    width: 100vw;
+    height: 180vh;
+    left: 50vw;
+    // top: -224.4px;
+    background: rgb(255, 255, 255);
+    border-radius: 0px 0px 0px 332px;
+    transform: rotate(24.7deg);
+    // z-index:-1;
+}
+
+.login-right-side{
+    z-index: 1;
+    padding-top: 11vh;
+    padding-left: 6vw;
+}
