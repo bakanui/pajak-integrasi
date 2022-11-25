@@ -2,15 +2,10 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   CButton,
-  CCard,
-  CCardBody,
-  CCardGroup,
   CCol,
   CContainer,
   CForm,
   CFormInput,
-  CInputGroup,
-  CInputGroupText,
   CRow,
   CToast,
   CToastHeader,
@@ -19,7 +14,7 @@ import {
   CFormLabel,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser, cilWarning } from '@coreui/icons'
+import { cilCheckCircle, cilWarning } from '@coreui/icons'
 import login from '../../../assets/images/Frame.png'
 
 const Login = () => {
@@ -28,6 +23,24 @@ const Login = () => {
   const navigate = useNavigate()
   const toaster = useRef()
   const [toast, addToast] = useState(0)
+  const errorToast = (
+    <CToast title="Terjadi kesalahan">
+      <CToastHeader color="danger" closeButton>
+        <CIcon className="rounded me-2" icon={cilWarning} />
+        <strong className="me-auto">Terjadi kesalahan</strong>
+      </CToastHeader>
+      <CToastBody>Username atau Password anda salah. Silahkan cek kembali.</CToastBody>
+    </CToast>
+  )
+  const successToast = (
+    <CToast title="Login berhasil">
+      <CToastHeader color="success" closeButton>
+        <CIcon className="rounded me-2" icon={cilCheckCircle} />
+        <strong className="me-auto">Login berhasil</strong>
+      </CToastHeader>
+      <CToastBody>Authentikasi berhasil. Selamat datang.</CToastBody>
+    </CToast>
+  )
   const submitHandler = () => {
     if (password === 'Password123') {
       switch (username) {
@@ -35,6 +48,14 @@ const Login = () => {
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin PBB')
           localStorage.setItem('isLoggedIn', true)
+          addToast(successToast)
+          navigate('/dashboard')
+          break
+        case 'super_admin':
+          localStorage.setItem('username', username)
+          localStorage.setItem('fullname', 'Super Admin')
+          localStorage.setItem('isLoggedIn', true)
+          addToast(successToast)
           navigate('/dashboard')
           break
         case 'admin_Reklame':
@@ -47,36 +68,31 @@ const Login = () => {
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Air Tanah')
           localStorage.setItem('isLoggedIn', true)
+          addToast(successToast)
           navigate('/dashboard')
           break
         case 'admin_hiburan':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Hiburan')
           localStorage.setItem('isLoggedIn', true)
+          addToast(successToast)
           navigate('/dashboard')
           break
         case 'admin_penerangan_jalan':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Penerangan Jalan')
           localStorage.setItem('isLoggedIn', true)
+          addToast(successToast)
           navigate('/dashboard')
           break
         case 'admin_satpol_pp':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Satpol PP')
           localStorage.setItem('isLoggedIn', true)
+          addToast(successToast)
           navigate('/dashboard')
           break
         default:
-          const errorToast = (
-            <CToast title="Terjadi kesalahan">
-              <CToastHeader color="danger" closeButton>
-                <CIcon className="rounded me-2" icon={cilWarning} />
-                <strong className="me-auto">Terjadi kesalahan</strong>
-              </CToastHeader>
-              <CToastBody>Username atau Password anda salah. Silahkan cek kembali.</CToastBody>
-            </CToast>
-          )
           addToast(errorToast)
           break
       }
@@ -102,23 +118,22 @@ const Login = () => {
     }
   })
   return (
-    <div className="bg-danger min-vh-100 d-flex flex-row align-items-center no-scroll">
+    <div className="bg-login min-vh-100 d-flex flex-row align-items-center no-scroll">
       <CToaster ref={toaster} push={toast} placement="top-end" />
       <div className="login no-scroll"></div>
       <CContainer>
         <CRow>
-          {/* <div className="login"></div> */}
-          <CCol md={6} style={{ zIndex: 2 }}>
+          <CCol className="upper-login center-it" md={6} style={{ zIndex: 2 }}>
             <h6 className="text-white">Selamat datang di</h6>
             <h3 className="text-white">Aplikasi Pajak Terintegrasi</h3>
             <h4 className="text-white">Kabupaten Bangli</h4>
-            <img src={login}></img>
+            <img className="image-upper" src={login}></img>
           </CCol>
           <CCol md={6} className="login-right-side">
             <div className="p-4">
               <div>
                 <CForm>
-                  <h3 className="mb-5">Masuk ke akun Anda</h3>
+                  <h3 className="mb-5 center-it">Masuk ke akun Anda</h3>
                   <div className="mb-3">
                     <CFormLabel>Username</CFormLabel>
                     <CFormInput

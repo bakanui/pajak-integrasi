@@ -198,13 +198,20 @@ const IzinHabis = () => {
       })
       .catch((error) => {
         setLoad(false)
+        const message = ''
+        switch (error.message) {
+          case 'Network error':
+            message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
+          default:
+            message = 'Terjadi kesalahan tidak terduga. Silahkan hubungi Super Admin.'
+        }
         const errorToast = (
           <CToast title="Terjadi kesalahan">
             <CToastHeader closeButton>
               <CIcon className="rounded me-2" icon={cilWarning} />
               <strong className="me-auto">Terjadi kesalahan</strong>
             </CToastHeader>
-            <CToastBody>{error.message}</CToastBody>
+            <CToastBody>{message}</CToastBody>
           </CToast>
         )
         addToast(errorToast)

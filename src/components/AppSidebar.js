@@ -38,6 +38,8 @@ const AppSidebar = () => {
         return <AppSidebarNav items={peneranganjalan} />
       case 'admin_satpol_pp':
         return <AppSidebarNav items={satpolpp} />
+      case 'super_admin':
+        return <AppSidebarNav items={satpolpp} />
       default:
         return <></>
     }

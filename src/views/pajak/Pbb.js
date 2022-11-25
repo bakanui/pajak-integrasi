@@ -139,13 +139,20 @@ const PBB = () => {
       })
       .catch((error) => {
         setLoad(false)
+        const message = ''
+        switch (error.message) {
+          case 'Network error':
+            message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
+          default:
+            message = 'Terjadi kesalahan tidak terduga. Silahkan hubungi Super Admin.'
+        }
         const errorToast = (
           <CToast title="An error has occurred">
             <CToastHeader closeButton>
               <CIcon className="rounded me-2" icon={cilWarning} />
               <strong className="me-auto">An error has occurred</strong>
             </CToastHeader>
-            <CToastBody>{error.message}</CToastBody>
+            <CToastBody>{message}</CToastBody>
           </CToast>
         )
         addToast(errorToast)
@@ -306,8 +313,8 @@ const PBB = () => {
                     ]}
                     datas={reklame}
                   >
-                    <CButton color="danger" className="float-end me-3">
-                      <CIcon icon={cilCloudDownload} /> Unduh Laporan
+                    <CButton color="danger" className="float-end me-3 text-white">
+                      <CIcon className="text-white" icon={cilCloudDownload} /> Unduh Laporan
                     </CButton>
                   </CsvDownloader>
                 </CCol>
