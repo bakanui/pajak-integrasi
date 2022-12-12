@@ -207,7 +207,7 @@ const IzinHabis = () => {
         }
         const errorToast = (
           <CToast title="Terjadi kesalahan">
-            <CToastHeader closeButton>
+            <CToastHeader color="danger" closeButton>
               <CIcon className="rounded me-2" icon={cilWarning} />
               <strong className="me-auto">Terjadi kesalahan</strong>
             </CToastHeader>

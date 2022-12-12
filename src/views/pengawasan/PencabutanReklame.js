@@ -59,7 +59,10 @@ const PencabutanReklame = () => {
   const [load, setLoad] = useState(true)
   const [reklame, setReklame] = useState([])
   const [toast, addToast] = useState(0)
+  const [modal, setModal] = useState(false)
   const [modal2, setModal2] = useState(false)
+  const [file, setFile] = useState()
+  const [image, setImage] = useState('')
   const [ketetapan, setKetetapan] = useState([])
   const statusFilter = 'Ijin Kadaluarsa'
   const [npwpdFilter, setNpwpdFilter] = useState('')
@@ -166,7 +169,16 @@ const PencabutanReklame = () => {
                   Aksi
                 </CButton>
               ) : (
-                <></>
+                <CButton
+                  className="text-white"
+                  color="info"
+                  onClick={() => {
+                    setImage(item.url)
+                    setModal(!modal)
+                  }}
+                >
+                  Lihat
+                </CButton>
               )}
             </CTableDataCell>
           </CTableRow>
@@ -218,17 +230,23 @@ const PencabutanReklame = () => {
   }
 
   const updateHandler = () => {
+    let formData = new FormData()
+    formData.append('id', id)
+    formData.append('status', 'Sudah Dicabut')
+    formData.append('file', file)
+    console.log(file)
     const data = {
       id: id,
       status: 'Sudah Dicabut',
+      file: file,
     }
-    axios.put('http://maiharta.ddns.net:5002/reklame', data).then(() => {
+    axios.put('http://maiharta.ddns.net:5002/reklame', formData).then(() => {
       setModal2(!modal2)
       fetchData(statusFilter, npwpdFilter, reset)
       const errorToast = (
         <CToast title="Berhasil">
           <CToastHeader color="success" closeButton>
-            <CIcon className="rounded me-2" icon={cilWarning} />
+            <CIcon className="rounded me-2" icon={cilCheck} />
             <strong className="me-auto">Aksi berhasil!</strong>
           </CToastHeader>
           <CToastBody>Data berhasil disimpan.</CToastBody>
@@ -400,7 +418,11 @@ const PencabutanReklame = () => {
                     </CFormLabel>
                     <CCol sm={7}>
                       <CInputGroup className="mb-3">
-                        <CFormInput type="file" id="inputGroupFile02" />
+                        <CFormInput
+                          type="file"
+                          id="inputGroupFile02"
+                          onChange={(e) => setFile(e.target.files[0])}
+                        />
                       </CInputGroup>
                     </CCol>
                   </CRow>
@@ -414,6 +436,16 @@ const PencabutanReklame = () => {
                   Unggah Foto
                 </CButton>
               </CModalFooter>
+            </CModal>
+            <CModal visible={modal} onClose={() => setModal(false)}>
+              <CModalHeader>
+                <CModalTitle>Bukti Pencabutan</CModalTitle>
+              </CModalHeader>
+              <CModalBody>
+                <CContainer>
+                  <img style={{ width: '100%' }} src={image} />
+                </CContainer>
+              </CModalBody>
             </CModal>
           </CCard>
         </CRow>
