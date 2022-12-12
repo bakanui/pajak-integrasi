@@ -55,6 +55,7 @@ import { id } from 'react-date-range/dist/locale'
 import { Helmet } from 'react-helmet'
 
 const PencabutanReklame = () => {
+  const [id, setId] = useState(0)
   const [load, setLoad] = useState(true)
   const [reklame, setReklame] = useState([])
   const [toast, addToast] = useState(0)
@@ -153,9 +154,20 @@ const PencabutanReklame = () => {
             </CTableDataCell>
             <CTableDataCell>{badgeSelector(item.status)}</CTableDataCell>
             <CTableDataCell>
-              <CButton className="text-white" color="danger" onClick={() => setModal2(!modal2)}>
-                Aksi
-              </CButton>
+              {item.status !== 'Sudah Dicabut' ? (
+                <CButton
+                  className="text-white"
+                  color="danger"
+                  onClick={() => {
+                    setId(item.id)
+                    setModal2(!modal2)
+                  }}
+                >
+                  Aksi
+                </CButton>
+              ) : (
+                <></>
+              )}
             </CTableDataCell>
           </CTableRow>
         ))
@@ -203,6 +215,27 @@ const PencabutanReklame = () => {
         </CModal>
       </>
     )
+  }
+
+  const updateHandler = () => {
+    const data = {
+      id: id,
+      status: 'Sudah Dicabut',
+    }
+    axios.put('http://maiharta.ddns.net:5002/reklame', data).then(() => {
+      setModal2(!modal2)
+      fetchData(statusFilter, npwpdFilter, reset)
+      const errorToast = (
+        <CToast title="Berhasil">
+          <CToastHeader color="success" closeButton>
+            <CIcon className="rounded me-2" icon={cilWarning} />
+            <strong className="me-auto">Aksi berhasil!</strong>
+          </CToastHeader>
+          <CToastBody>Data berhasil disimpan.</CToastBody>
+        </CToast>
+      )
+      addToast(errorToast)
+    })
   }
 
   const badgeSelector = (status) => {
@@ -377,7 +410,9 @@ const PencabutanReklame = () => {
                 <CButton color="secondary" onClick={() => setModal2(false)}>
                   Batalkan
                 </CButton>
-                <CButton color="primary">Unggah Foto</CButton>
+                <CButton color="primary" onClick={() => updateHandler()}>
+                  Unggah Foto
+                </CButton>
               </CModalFooter>
             </CModal>
           </CCard>

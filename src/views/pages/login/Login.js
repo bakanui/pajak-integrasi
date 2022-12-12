@@ -58,7 +58,7 @@ const Login = () => {
           addToast(successToast)
           navigate('/dashboard')
           break
-        case 'admin_Reklame':
+        case 'admin_reklame':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Reklame')
           localStorage.setItem('isLoggedIn', true)

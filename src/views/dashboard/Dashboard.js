@@ -37,6 +37,9 @@ import Air from '../../assets/images/akar-icons_water.png'
 import Hiburan from '../../assets/images/bx_party.png'
 import Penerangan from '../../assets/images/mdi_coach-lamp.png'
 import Bumi from '../../assets/images/bx_building-house.png'
+import Hotel from '../../assets/images/resort.png'
+import Restoran from '../../assets/images/restaurant.png'
+import Parkir from '../../assets/images/parking.png'
 
 const Dashboard = () => {
   const [kadalFilter, setKadalFilter] = useState('Akan Kadaluarsa')
@@ -85,6 +88,21 @@ const Dashboard = () => {
   const [bumiRealisasi, setBumiRealisasi] = useState(0)
   const [bumiSisaTarget, setBumiSisaTarget] = useState(0)
   const [bumiRealisasiHariIni, setBumiRealisasiHariIni] = useState(0)
+  //Hotel
+  const [hotelTarget, setHotelTarget] = useState(0)
+  const [hotelRealisasi, setHotelRealisasi] = useState(0)
+  const [hotelSisaTarget, setHotelSisaTarget] = useState(0)
+  const [hotelRealisasiHariIni, setHotelRealisasiHariIni] = useState(0)
+  //Restaurant
+  const [restaurantTarget, setRestaurantTarget] = useState(0)
+  const [restaurantRealisasi, setRestaurantRealisasi] = useState(0)
+  const [restaurantSisaTarget, setRestaurantSisaTarget] = useState(0)
+  const [restaurantRealisasiHariIni, setRestaurantRealisasiHariIni] = useState(0)
+  //Parkir
+  const [parkirTarget, setParkirTarget] = useState(0)
+  const [parkirRealisasi, setParkirRealisasi] = useState(0)
+  const [parkirSisaTarget, setParkirSisaTarget] = useState(0)
+  const [parkirRealisasiHariIni, setParkirRealisasiHariIni] = useState(0)
 
   function fetchData() {
     setLoad(true)
@@ -873,6 +891,183 @@ const Dashboard = () => {
                       <h5 style={{ color: '#097600' }}>
                         <CurrencyFormat
                           value={bumiRealisasiHariIni}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                  </div>
+                </CCardText>
+              </CCardBody>
+            </CCard>
+          </CCol>
+          {/* hotel */}
+          <CCol md={3}>
+            <CCard className="mb-4">
+              <CCardHeader style={{ backgroundColor: '#009688' }} className="go-left text-white">
+                &nbsp;&nbsp;<img style={{ height: '1rem' }} src={Hotel}></img>&nbsp;&nbsp;Pajak
+                Hotel
+              </CCardHeader>
+              <CCardBody>
+                <CCardText>
+                  <div className="bd-example">
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Target</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={hotelTarget}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={hotelRealisasi}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Sisa Target</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={hotelSisaTarget}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi Hari Ini</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={hotelRealisasiHariIni}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                  </div>
+                </CCardText>
+              </CCardBody>
+            </CCard>
+          </CCol>
+          {/* restoran */}
+          <CCol md={3}>
+            <CCard className="mb-4">
+              <CCardHeader style={{ backgroundColor: '#607d8b' }} className="go-left text-white">
+                &nbsp;&nbsp;<img style={{ height: '1rem' }} src={Restoran}></img>&nbsp;&nbsp;Pajak
+                Restoran
+              </CCardHeader>
+              <CCardBody>
+                <CCardText>
+                  <div className="bd-example">
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Target</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={restaurantTarget}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={restaurantRealisasi}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Sisa Target</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={restaurantSisaTarget}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi Hari Ini</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={restaurantRealisasiHariIni}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                  </div>
+                </CCardText>
+              </CCardBody>
+            </CCard>
+          </CCol>
+          {/* parkir */}
+          <CCol md={3}>
+            <CCard className="mb-4">
+              <CCardHeader style={{ backgroundColor: '#321fdb' }} className="go-left text-white">
+                &nbsp;&nbsp;<img style={{ height: '1rem' }} src={Parkir}></img>&nbsp;&nbsp;Pajak
+                Parkir
+              </CCardHeader>
+              <CCardBody>
+                <CCardText>
+                  <div className="bd-example">
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Target</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={parkirTarget}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={parkirRealisasi}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Sisa Target</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={parkirSisaTarget}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          // prefix={'Rp '}
+                        />
+                      </h5>
+                    </div>
+                    <div className="row mb-3">
+                      <h6 style={{ color: '#979797' }}>Realisasi Hari Ini</h6>
+                      <h5 style={{ color: '#097600' }}>
+                        <CurrencyFormat
+                          value={parkirRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
                           // prefix={'Rp '}
