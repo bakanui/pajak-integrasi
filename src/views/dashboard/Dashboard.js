@@ -262,12 +262,14 @@ const Dashboard = () => {
         setSudahKadaluarsa(sudahKadal)
         //semua
         dataRek.map((d) => {
-          targetRek = targetRek + d.nominal
-          if (d.status !== 'Belum Lunas') {
-            realisasiRek = realisasiRek + d.nominal
-          }
-          if (new Date(d.periode[1]) === today) {
-            realisasiHariIniRek = realisasiHariIniRek + d.nominal
+          if (d.nominal !== '') {
+            targetRek = targetRek + parseInt(d.nominal)
+            if (d.status !== 'Belum Lunas') {
+              realisasiRek = realisasiRek + parseInt(d.nominal)
+            }
+            if (new Date(d.periode[1]) === today) {
+              realisasiHariIniRek = realisasiHariIniRek + parseInt(d.nominal)
+            }
           }
         })
         sisaTargetRek = targetRek - realisasiRek
@@ -282,12 +284,14 @@ const Dashboard = () => {
         let sisaTargetRekl = 0
         let realisasiHariIniRekl = 0
         dataReklame.map((d) => {
-          targetRekl = targetRekl + d.nominal
-          if (d.status !== 'Belum Lunas') {
-            realisasiRekl = realisasiRekl + d.nominal
-          }
-          if (new Date(d.periode[1]) === today) {
-            realisasiHariIniRekl = realisasiHariIniRekl + d.nominal
+          if (d.nominal !== '') {
+            targetRekl = targetRekl + parseInt(d.nominal)
+            if (d.status !== 'Belum Lunas') {
+              realisasiRekl = realisasiRekl + parseInt(d.nominal)
+            }
+            if (new Date(d.periode[1]) === today) {
+              realisasiHariIniRekl = realisasiHariIniRekl + parseInt(d.nominal)
+            }
           }
         })
         sisaTargetRekl = targetRekl - realisasiRekl
@@ -302,12 +306,14 @@ const Dashboard = () => {
         let sisaTargetAir = 0
         let realisasiHariIniAir = 0
         dataAirTanah.map((d) => {
-          targetAir = targetAir + d.nominal
-          if (d.status !== 'Belum Lunas') {
-            realisasiAir = realisasiAir + d.nominal
-          }
-          if (new Date(d.periode[1]) === today) {
-            realisasiHariIniAir = realisasiHariIniAir + d.nominal
+          if (d.nominal !== '') {
+            targetAir = targetAir + parseInt(d.nominal)
+            if (d.status !== 'Belum Lunas') {
+              realisasiAir = realisasiAir + parseInt(d.nominal)
+            }
+            if (new Date(d.periode[1]) === today) {
+              realisasiHariIniAir = realisasiHariIniAir + parseInt(d.nominal)
+            }
           }
         })
         sisaTargetAir = targetAir - realisasiAir
@@ -322,12 +328,14 @@ const Dashboard = () => {
         let sisaTargetHiburan = 0
         let realisasiHariIniHiburan = 0
         dataHiburan.map((d) => {
-          targetHiburan = targetHiburan + d.nominal
-          if (d.status !== 'Belum Lunas') {
-            realisasiHiburan = realisasiHiburan + d.nominal
-          }
-          if (new Date(d.periode[1]) === today) {
-            realisasiHariIniHiburan = realisasiHariIniHiburan + d.nominal
+          if (d.nominal !== '') {
+            targetHiburan = targetHiburan + parseInt(d.nominal)
+            if (d.status !== 'Belum Lunas') {
+              realisasiHiburan = realisasiHiburan + parseInt(d.nominal)
+            }
+            if (new Date(d.periode[1]) === today) {
+              realisasiHariIniHiburan = realisasiHariIniHiburan + parseInt(d.nominal)
+            }
           }
         })
         sisaTargetHiburan = targetHiburan - realisasiHiburan
@@ -342,12 +350,15 @@ const Dashboard = () => {
         let sisaTargetPeneranganJalan = 0
         let realisasiHariIniPeneranganJalan = 0
         dataPeneranganJalan.map((d) => {
-          targetPeneranganJalan = targetPeneranganJalan + d.nominal
-          if (d.status !== 'Belum Lunas') {
-            realisasiPeneranganJalan = realisasiPeneranganJalan + d.nominal
-          }
-          if (new Date(d.periode[1]) === today) {
-            realisasiHariIniPeneranganJalan = realisasiHariIniPeneranganJalan + d.nominal
+          if (d.nominal !== '') {
+            targetPeneranganJalan = targetPeneranganJalan + parseInt(d.nominal)
+            if (d.status !== 'Belum Lunas') {
+              realisasiPeneranganJalan = realisasiPeneranganJalan + parseInt(d.nominal)
+            }
+            if (new Date(d.periode[1]) === today) {
+              realisasiHariIniPeneranganJalan =
+                realisasiHariIniPeneranganJalan + parseInt(d.nominal)
+            }
           }
         })
         sisaTargetPeneranganJalan = targetPeneranganJalan - realisasiPeneranganJalan
