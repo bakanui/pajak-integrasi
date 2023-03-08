@@ -18,7 +18,6 @@ const isLoggedIn = localStorage.getItem('isLoggedIn')
 
 class App extends Component {
   render() {
-    console.log(isLoggedIn)
     return (
       <BrowserRouter>
         <Suspense fallback={loading}>

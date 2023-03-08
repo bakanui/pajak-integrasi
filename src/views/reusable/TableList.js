@@ -63,13 +63,18 @@ export default function TableList({ jenisPajak, icon }) {
     },
   ])
   const [reset, setReset] = useState(true)
+  const headers = {
+    headers: {
+      Authorization:
+        'CTL1-VENDOR-APP App=integrasi-bangli,Token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.q_VDxCnmfRVta1byY2S-237lnWKTwpfAd8LID70Ls_o',
+    },
+  }
 
   function fetchData(status, npwpd, date) {
     setLoad(true)
-    let query =
-      'http://maiharta.ddns.net:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+    let query = 'http://36.88.117.202/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
     axios
-      .get(query)
+      .get(query, headers)
       .then((res) => {
         let filter = { namaJenisPajak: 'Pajak ' + jenisPajak }
         if (npwpd !== '') {

@@ -49,48 +49,48 @@ const Login = () => {
           localStorage.setItem('fullname', 'Admin PBB')
           localStorage.setItem('isLoggedIn', true)
           addToast(successToast)
-          navigate('/dashboard')
+          navigate('/')
           break
         case 'super_admin':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Super Admin')
           localStorage.setItem('isLoggedIn', true)
           addToast(successToast)
-          navigate('/dashboard')
+          navigate('/')
           break
         case 'admin_reklame':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Reklame')
           localStorage.setItem('isLoggedIn', true)
-          navigate('/dashboard')
+          navigate('/')
           break
         case 'admin_air_tanah':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Air Tanah')
           localStorage.setItem('isLoggedIn', true)
           addToast(successToast)
-          navigate('/dashboard')
+          navigate('/')
           break
         case 'admin_hiburan':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Hiburan')
           localStorage.setItem('isLoggedIn', true)
           addToast(successToast)
-          navigate('/dashboard')
+          navigate('/')
           break
         case 'admin_penerangan_jalan':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Penerangan Jalan')
           localStorage.setItem('isLoggedIn', true)
           addToast(successToast)
-          navigate('/dashboard')
+          navigate('/')
           break
         case 'admin_satpol_pp':
           localStorage.setItem('username', username)
           localStorage.setItem('fullname', 'Admin Satpol PP')
           localStorage.setItem('isLoggedIn', true)
           addToast(successToast)
-          navigate('/dashboard')
+          navigate('/')
           break
         default:
           addToast(errorToast)
