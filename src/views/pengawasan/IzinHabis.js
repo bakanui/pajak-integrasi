@@ -83,7 +83,7 @@ const IzinHabis = () => {
   function fetchData(status, npwpd, date) {
     setLoad(true)
     let query =
-      'http://maiharta.ddns.net:3100/http://36.94.200.157:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+      'http://maiharta.ddns.net:3100/http://36.88.117.202:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
     axios
       .get(query)
       .then((res) => {
@@ -219,27 +219,28 @@ const IzinHabis = () => {
   }
 
   const submitHandler = () => {
-    const data = {
-      nomor: nomor,
-      jenis: jenis,
-      lokasi_pemasangan: lokasi_pemasangan,
-      nama_wajib_pajak: nama_wajib_pajak,
-      tanggal_rencana_dicopot: date,
-      status: 'Akan Dicabut',
-    }
-    axios.post('http://maiharta.ddns.net:5002/reklame', data).then(() => {
-      setModal(!modal)
-      const errorToast = (
-        <CToast title="Berhasil">
-          <CToastHeader color="success" closeButton>
-            <CIcon className="rounded me-2" icon={cilWarning} />
-            <strong className="me-auto">Aksi berhasil!</strong>
-          </CToastHeader>
-          <CToastBody>Data berhasil disimpan.</CToastBody>
-        </CToast>
-      )
-      addToast(errorToast)
-    })
+    let formData = new FormData()
+    formData.append('nomor', nomor)
+    formData.append('jenis', jenis)
+    formData.append('lokasi_pemasangan', lokasi_pemasangan)
+    formData.append('nama_wajib_pajak', nama_wajib_pajak)
+    formData.append('tanggal_rencana_dicopot', date)
+    formData.append('status', 'Akan Dicabut')
+    axios
+      .post('http://maiharta.ddns.net:3100/http://maiharta.ddns.net:3098/reklame', formData)
+      .then(() => {
+        setModal(!modal)
+        const errorToast = (
+          <CToast title="Berhasil">
+            <CToastHeader color="success" closeButton>
+              <CIcon className="rounded me-2" icon={cilWarning} />
+              <strong className="me-auto">Aksi berhasil!</strong>
+            </CToastHeader>
+            <CToastBody>Data berhasil disimpan.</CToastBody>
+          </CToast>
+        )
+        addToast(errorToast)
+      })
   }
 
   useEffect(() => {

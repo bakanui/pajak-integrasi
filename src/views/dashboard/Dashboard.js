@@ -106,7 +106,8 @@ const Dashboard = () => {
 
   function fetchData() {
     setLoad(true)
-    let query = 'http://36.88.117.202/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+    let query =
+      'http://maiharta.ddns.net:3100/http://36.88.117.202:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
     let headers = {
       headers: {
         Authorization:
@@ -397,7 +398,7 @@ const Dashboard = () => {
 
   function fetchPbb() {
     let query =
-      'http://36.88.117.202:40200/revenue/tax/property/report/penerimaan/reportevaluasipenerimaan'
+      'http://maiharta.ddns.net:3100/http://36.88.117.202:40200/revenue/tax/property/report/penerimaan/reportevaluasipenerimaan'
     const headers = {
       headers: {
         'cti-auth-token':

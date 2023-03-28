@@ -81,7 +81,7 @@ const PencabutanReklame = () => {
 
   function fetchData(status, npwpd, date) {
     setLoad(true)
-    let query = 'http://maiharta.ddns.net:5002/reklame'
+    let query = 'http://maiharta.ddns.net:3098/reklame'
     axios
       .get(query)
       .then((res) => {
@@ -234,26 +234,27 @@ const PencabutanReklame = () => {
     formData.append('id', id)
     formData.append('status', 'Sudah Dicabut')
     formData.append('file', file)
-    console.log(file)
-    const data = {
-      id: id,
-      status: 'Sudah Dicabut',
-      file: file,
-    }
-    axios.put('http://maiharta.ddns.net:5002/reklame', formData).then(() => {
-      setModal2(!modal2)
-      fetchData(statusFilter, npwpdFilter, reset)
-      const errorToast = (
-        <CToast title="Berhasil">
-          <CToastHeader color="success" closeButton>
-            <CIcon className="rounded me-2" icon={cilCheck} />
-            <strong className="me-auto">Aksi berhasil!</strong>
-          </CToastHeader>
-          <CToastBody>Data berhasil disimpan.</CToastBody>
-        </CToast>
-      )
-      addToast(errorToast)
-    })
+    axios
+      .post('http://maiharta.ddns.net:3100/http://maiharta.ddns.net:3098/upload', formData)
+      .then((res) => {
+        formData.append('url', res.url)
+        axios
+          .put('http://maiharta.ddns.net:3100/http://maiharta.ddns.net:3098/reklame', formData)
+          .then(() => {
+            setModal2(!modal2)
+            fetchData(statusFilter, npwpdFilter, reset)
+            const errorToast = (
+              <CToast title="Berhasil">
+                <CToastHeader color="success" closeButton>
+                  <CIcon className="rounded me-2" icon={cilCheck} />
+                  <strong className="me-auto">Aksi berhasil!</strong>
+                </CToastHeader>
+                <CToastBody>Data berhasil disimpan.</CToastBody>
+              </CToast>
+            )
+            addToast(errorToast)
+          })
+      })
   }
 
   const badgeSelector = (status) => {

@@ -72,7 +72,8 @@ export default function TableList({ jenisPajak, icon }) {
 
   function fetchData(status, npwpd, date) {
     setLoad(true)
-    let query = 'http://36.88.117.202/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+    let query =
+      'http://maiharta.ddns.net:3100/http://36.88.117.202:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
     axios
       .get(query, headers)
       .then((res) => {
