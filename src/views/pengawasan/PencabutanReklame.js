@@ -81,7 +81,7 @@ const PencabutanReklame = () => {
 
   function fetchData(status, npwpd, date) {
     setLoad(true)
-    let query = 'http://maiharta.ddns.net:3098/reklame'
+    let query = 'https://maiharta.ddns.net:3098/reklame'
     axios
       .get(query)
       .then((res) => {
