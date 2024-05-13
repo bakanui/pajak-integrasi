@@ -22,6 +22,11 @@ import {
   CDropdown,
   CDropdownToggle,
   CDropdownMenu,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilWarning } from '@coreui/icons'
@@ -103,6 +108,10 @@ const Dashboard = () => {
   const [parkirRealisasi, setParkirRealisasi] = useState(0)
   const [parkirSisaTarget, setParkirSisaTarget] = useState(0)
   const [parkirRealisasiHariIni, setParkirRealisasiHariIni] = useState(0)
+  // Modal Aksi
+  const [modal, setModal] = useState(false)
+
+  const isAdminSatpolPP = localStorage.getItem('username') === 'admin_satpol_pp'
 
   function fetchData() {
     setLoad(true)
@@ -398,7 +407,7 @@ const Dashboard = () => {
 
   function fetchPbb() {
     let query =
-      'http://maiharta.ddns.net:3100/http://36.88.117.202:40200/revenue/tax/property/report/penerimaan/reportevaluasipenerimaan'
+      'https://maiharta.ddns.net:3100/http://36.88.117.202:40200/revenue/tax/property/report/penerimaan/reportevaluasipenerimaan'
     const headers = {
       headers: {
         'cti-auth-token':
@@ -441,6 +450,7 @@ const Dashboard = () => {
             <CTableDataCell></CTableDataCell>
             <CTableDataCell></CTableDataCell>
             <CTableDataCell></CTableDataCell>
+            {!isAdminSatpolPP && <CTableDataCell></CTableDataCell>}
           </CTableRow>
         </>
       )
@@ -492,6 +502,19 @@ const Dashboard = () => {
                 'N/A'
               )}
             </CTableDataCell>
+            {!isAdminSatpolPP && (
+              <CTableDataCell>
+                <CButton
+                  className="text-white"
+                  color="danger"
+                  onClick={() => {
+                    setModal(!modal)
+                  }}
+                >
+                  Aksi
+                </CButton>
+              </CTableDataCell>
+            )}
           </CTableRow>
         ))
       } else {
@@ -510,6 +533,7 @@ const Dashboard = () => {
               <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
               <CTableDataCell></CTableDataCell>
+              {!isAdminSatpolPP && <CTableDataCell></CTableDataCell>}
             </CTableRow>
           </>
         )
@@ -1203,6 +1227,7 @@ const Dashboard = () => {
                         <CTableHeaderCell>Nominal</CTableHeaderCell>
                         <CTableHeaderCell>Tanggal Jatuh Tempo</CTableHeaderCell>
                         <CTableHeaderCell>Periode</CTableHeaderCell>
+                        {!isAdminSatpolPP && <CTableHeaderCell>Aksi</CTableHeaderCell>}
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -1222,6 +1247,22 @@ const Dashboard = () => {
         </CRow>
       </CContainer>
       <CToaster ref={toaster} push={toast} placement="top-end" />
+      <CModal visible={modal} onClose={() => setModal(false)}>
+        <CModalHeader>
+          <CModalTitle>Pencabutan</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Apakah anda yakin ingin mencabut laporan ini?</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setModal(false)}>
+            Batalkan
+          </CButton>
+          <CButton className="text-white" color="danger" onClick={() => {}}>
+            Yakin
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </>
   )
 }

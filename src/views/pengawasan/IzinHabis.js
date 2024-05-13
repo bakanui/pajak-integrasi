@@ -33,6 +33,7 @@ import {
   CFormLabel,
   CModalFooter,
   CInputGroupText,
+  CFormSelect,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -53,6 +54,7 @@ import { Calendar } from 'react-date-range'
 import CsvDownloader from 'react-csv-downloader'
 import { id } from 'react-date-range/dist/locale'
 import { Helmet } from 'react-helmet'
+import { DateRangePicker } from 'react-date-range'
 
 const IzinHabis = () => {
   const [load, setLoad] = useState(true)
@@ -401,94 +403,129 @@ const IzinHabis = () => {
         <CRow>
           <CCard className="mb-4">
             <CCardBody>
-              <CRow>
-                <CCol sm={5} className="d-none d-md-block">
-                  <CInputGroup>
-                    <CFormInput
-                      placeholder="Cari NPWPD..."
-                      className="mx-0"
-                      onChange={(e) => {
-                        setNpwpdFilter(e.target.value)
-                      }}
-                    />
-                    <CButton
-                      type="button"
-                      color="secondary"
-                      variant="outline"
-                      onClick={() => {
-                        fetchData(statusFilter, npwpdFilter)
-                      }}
+              <CCol>
+                <CRow>
+                  <CCol sm={5} className="d-none d-md-block">
+                    <CInputGroup>
+                      <CFormInput
+                        placeholder="Cari NPWPD..."
+                        className="mx-0"
+                        onChange={(e) => {
+                          setNpwpdFilter(e.target.value)
+                        }}
+                      />
+                      <CButton
+                        type="button"
+                        color="secondary"
+                        variant="outline"
+                        onClick={() => {
+                          fetchData(statusFilter, npwpdFilter)
+                        }}
+                      >
+                        <CIcon icon={cilSearch}></CIcon>
+                      </CButton>
+                    </CInputGroup>
+                  </CCol>
+                  <CCol sm={7} className="d-none d-md-block">
+                    <CsvDownloader
+                      filename={(() => {
+                        if (reset) {
+                          let strRet = 'laporan_' + jenisPajak + '_' + 'semua'
+                          return strRet
+                        } else {
+                          let strRet =
+                            'laporan_' +
+                            jenisPajak +
+                            '_' +
+                            format(new Date(selectionRange[0].startDate), 'ddMMyy') +
+                            '-' +
+                            format(new Date(selectionRange[0].endDate), 'ddMMyy')
+                          return strRet
+                        }
+                      })()}
+                      extension=".csv"
+                      separator=";"
+                      wrapColumnChar=""
+                      columns={[
+                        {
+                          id: 'nomor',
+                          displayName: 'Nomor ',
+                        },
+                        {
+                          id: 'npwpd',
+                          displayName: 'NPWPD',
+                        },
+                        {
+                          id: 'jenis_reklame',
+                          displayName: 'Jenis Objek',
+                        },
+                        {
+                          id: 'lokasi_pemasangan',
+                          displayName: 'Lokasi Pemasangan',
+                        },
+                        {
+                          id: 'nama_wajib_pajak',
+                          displayName: 'Nama Wajib Pajak',
+                        },
+                        {
+                          id: 'nominal',
+                          displayName: 'Nominal',
+                        },
+                        {
+                          id: 'tanggal_jatuh_tempo',
+                          displayName: 'Tanggal Jatuh Tempo',
+                        },
+                        {
+                          id: 'periode',
+                          displayName: 'Periode',
+                        },
+                        {
+                          id: 'status',
+                          displayName: 'Status',
+                        },
+                      ]}
+                      datas={reklame}
                     >
-                      <CIcon icon={cilSearch}></CIcon>
-                    </CButton>
-                  </CInputGroup>
-                </CCol>
-                <CCol sm={7} className="d-none d-md-block">
-                  <CsvDownloader
-                    filename={(() => {
-                      if (reset) {
-                        let strRet = 'laporan_' + jenisPajak + '_' + 'semua'
-                        return strRet
-                      } else {
-                        let strRet =
-                          'laporan_' +
-                          jenisPajak +
-                          '_' +
-                          format(new Date(selectionRange[0].startDate), 'ddMMyy') +
-                          '-' +
-                          format(new Date(selectionRange[0].endDate), 'ddMMyy')
-                        return strRet
-                      }
-                    })()}
-                    extension=".csv"
-                    separator=";"
-                    wrapColumnChar=""
-                    columns={[
-                      {
-                        id: 'nomor',
-                        displayName: 'Nomor ',
-                      },
-                      {
-                        id: 'npwpd',
-                        displayName: 'NPWPD',
-                      },
-                      {
-                        id: 'jenis_reklame',
-                        displayName: 'Jenis Objek',
-                      },
-                      {
-                        id: 'lokasi_pemasangan',
-                        displayName: 'Lokasi Pemasangan',
-                      },
-                      {
-                        id: 'nama_wajib_pajak',
-                        displayName: 'Nama Wajib Pajak',
-                      },
-                      {
-                        id: 'nominal',
-                        displayName: 'Nominal',
-                      },
-                      {
-                        id: 'tanggal_jatuh_tempo',
-                        displayName: 'Tanggal Jatuh Tempo',
-                      },
-                      {
-                        id: 'periode',
-                        displayName: 'Periode',
-                      },
-                      {
-                        id: 'status',
-                        displayName: 'Status',
-                      },
-                    ]}
-                    datas={reklame}
-                  >
-                    <CButton color="danger" className="float-end me-3 text-white">
-                      <CIcon className="text-white" icon={cilCloudDownload} /> Unduh Laporan
-                    </CButton>
-                  </CsvDownloader>
-                </CCol>
-              </CRow>
+                      <CButton color="danger" className="float-end me-3 text-white">
+                        <CIcon className="text-white" icon={cilCloudDownload} /> Unduh Laporan
+                      </CButton>
+                    </CsvDownloader>
+                  </CCol>
+                </CRow>
+                <CRow xs={{ cols: 'auto' }} className="mt-3 gap-2">
+                  <CCol>
+                    <CDropdown variant="btn-group">
+                      <CButton variant="outline" color="dark" disabled>
+                        {`${format(new Date(selectionRange[0].startDate), 'dd MMMM yyyy')} -
+                      ${format(new Date(selectionRange[0].endDate), 'dd MMMM yyyy')}`}
+                      </CButton>
+                      <CDropdownToggle variant="outline" color="secondary" />
+                      <CDropdownMenu>
+                        <DateRangePicker
+                          onChange={(item) => {
+                            setSelectionRange([item.selection])
+                          }}
+                          showSelectionPreview={true}
+                          showDateDisplay={true}
+                          showMonthAndYearPickers={true}
+                          showPreview={false}
+                          moveRangeOnFirstSelection={false}
+                          ranges={selectionRange}
+                          direction="horizontal"
+                        />
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CCol>
+                  <CCol className="px-0">
+                    <CFormSelect aria-label="Default select example">
+                      <option>Status</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </CFormSelect>
+                  </CCol>
+                </CRow>
+              </CCol>
               <br />
               <CTable align="middle" className="mb-0" hover responsive>
                 <CTableHead>
