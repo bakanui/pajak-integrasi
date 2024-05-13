@@ -33,7 +33,6 @@ import {
   CFormLabel,
   CModalFooter,
   CInputGroupText,
-  CFormSelect,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -62,7 +61,7 @@ const IzinHabis = () => {
   const [toast, addToast] = useState(0)
   const [modal, setModal] = useState(false)
   const [ketetapan, setKetetapan] = useState([])
-  const statusFilter = 'Ijin Kadaluarsa'
+  const [statusFilter, setStatusFilter] = useState('Ijin Kadaluarsa')
   const [npwpdFilter, setNpwpdFilter] = useState('')
   const toaster = useRef()
   const today = new Date()
@@ -515,12 +514,21 @@ const IzinHabis = () => {
                     </CDropdown>
                   </CCol>
                   <CCol className="px-0">
-                    <CFormSelect aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </CFormSelect>
+                    <CDropdown variant="btn-group">
+                      <CButton variant="outline" color="dark" disabled>
+                        <CIcon icon={cilFilter} /> {statusFilter}
+                      </CButton>
+                      <CDropdownToggle variant="outline" color="secondary" />
+                      <CDropdownMenu>
+                        {['Ijin Kedaluarsa', 'Ijin Dicabut', 'Akan Dicabut', 'Sudah Dicabut'].map(
+                          (status) => (
+                            <CDropdownItem key={status} onClick={() => setStatusFilter(status)}>
+                              {status}
+                            </CDropdownItem>
+                          ),
+                        )}
+                      </CDropdownMenu>
+                    </CDropdown>
                   </CCol>
                 </CRow>
               </CCol>
