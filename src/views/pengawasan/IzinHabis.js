@@ -228,21 +228,19 @@ const IzinHabis = () => {
     formData.append('nama_wajib_pajak', nama_wajib_pajak)
     formData.append('tanggal_rencana_dicopot', date)
     formData.append('status', 'Akan Dicabut')
-    axios
-      .post('http://maiharta.ddns.net:3100/http://maiharta.ddns.net:3098/reklame', formData)
-      .then(() => {
-        setModal(!modal)
-        const errorToast = (
-          <CToast title="Berhasil">
-            <CToastHeader color="success" closeButton>
-              <CIcon className="rounded me-2" icon={cilWarning} />
-              <strong className="me-auto">Aksi berhasil!</strong>
-            </CToastHeader>
-            <CToastBody>Data berhasil disimpan.</CToastBody>
-          </CToast>
-        )
-        addToast(errorToast)
-      })
+    axios.post('https://api-depi.bakanui.online/reklame', formData).then(() => {
+      setModal(!modal)
+      const errorToast = (
+        <CToast title="Berhasil">
+          <CToastHeader color="success" closeButton>
+            <CIcon className="rounded me-2" icon={cilWarning} />
+            <strong className="me-auto">Aksi berhasil!</strong>
+          </CToastHeader>
+          <CToastBody>Data berhasil disimpan.</CToastBody>
+        </CToast>
+      )
+      addToast(errorToast)
+    })
   }
 
   useEffect(() => {

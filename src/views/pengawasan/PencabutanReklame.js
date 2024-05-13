@@ -83,21 +83,26 @@ const PencabutanReklame = () => {
 
   function fetchData(status, npwpd, date) {
     setLoad(true)
-    let query = 'https://maiharta.ddns.net:3098/reklame'
+    let query = 'https://api-depi.bakanui.online/reklame?page=1&limit=10'
+    // if (status) {
+    //   query = query + '?status=' + status
+    // }
     axios
       .get(query)
       .then((res) => {
-        setReklame(res.data)
+        setReklame(res.data.data)
         setLoad(false)
       })
       .catch((error) => {
         setLoad(false)
-        const message = ''
+        let message = ''
         switch (error.message) {
           case 'Network error':
             message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
+            break
           default:
             message = 'Terjadi kesalahan tidak terduga. Silahkan hubungi Super Admin.'
+            break
         }
         const errorToast = (
           <CToast title="Terjadi kesalahan">
@@ -236,27 +241,23 @@ const PencabutanReklame = () => {
     formData.append('id', id)
     formData.append('status', 'Sudah Dicabut')
     formData.append('file', file)
-    axios
-      .post('http://maiharta.ddns.net:3100/http://maiharta.ddns.net:3098/upload', formData)
-      .then((res) => {
-        formData.append('url', res.url)
-        axios
-          .put('http://maiharta.ddns.net:3100/http://maiharta.ddns.net:3098/reklame', formData)
-          .then(() => {
-            setModal2(!modal2)
-            fetchData(statusFilter, npwpdFilter, reset)
-            const errorToast = (
-              <CToast title="Berhasil">
-                <CToastHeader color="success" closeButton>
-                  <CIcon className="rounded me-2" icon={cilCheck} />
-                  <strong className="me-auto">Aksi berhasil!</strong>
-                </CToastHeader>
-                <CToastBody>Data berhasil disimpan.</CToastBody>
-              </CToast>
-            )
-            addToast(errorToast)
-          })
+    axios.post('https://api-depi.bakanui.online/upload', formData).then((res) => {
+      formData.append('url', res.url)
+      axios.put('https://api-depi.bakanui.online/reklame', formData).then(() => {
+        setModal2(!modal2)
+        fetchData(statusFilter, npwpdFilter, reset)
+        const errorToast = (
+          <CToast title="Berhasil">
+            <CToastHeader color="success" closeButton>
+              <CIcon className="rounded me-2" icon={cilCheck} />
+              <strong className="me-auto">Aksi berhasil!</strong>
+            </CToastHeader>
+            <CToastBody>Data berhasil disimpan.</CToastBody>
+          </CToast>
+        )
+        addToast(errorToast)
       })
+    })
   }
 
   const badgeSelector = (status) => {
