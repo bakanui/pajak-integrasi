@@ -16,12 +16,13 @@ const PengawasanReklame = React.lazy(() => import('./views/pengawasan/Pencabutan
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/pengawasan/izin-habis', name: 'Reklame Izin Habis', element: Pengawasan },
-  {
-    path: '/pengawasan/pencabutan-reklame',
-    name: 'Jadwal Pencabutan Reklame',
-    element: PengawasanReklame,
-  },
+  { path: '/pengawasan', name: 'Pengawasan', element: PengawasanReklame },
+  // { path: '/pengawasan/izin-habis', name: 'Reklame Izin Habis', element: Pengawasan },
+  // {
+  //   path: '/pengawasan/pencabutan-reklame',
+  //   name: 'Jadwal Pencabutan Reklame',
+  //   element: PengawasanReklame,
+  // },
   { path: '/pajak/pbb', name: 'Pajak Bumi dan Bangunan', element: PBB },
   { path: '/pajak/reklame', name: 'Pajak Reklame', element: Reklame },
   { path: '/pajak/hiburan', name: 'Pajak Hiburan', element: Hiburan },

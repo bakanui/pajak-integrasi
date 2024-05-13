@@ -203,8 +203,10 @@ const IzinHabis = () => {
         switch (error.message) {
           case 'Network error':
             message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
+            break
           default:
             message = 'Terjadi kesalahan tidak terduga. Silahkan hubungi Super Admin.'
+            break
         }
         const errorToast = (
           <CToast title="Terjadi kesalahan">

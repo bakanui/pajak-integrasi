@@ -61,6 +61,7 @@ const PencabutanReklame = () => {
   const [reklame, setReklame] = useState([])
   const [toast, addToast] = useState(0)
   const [modal, setModal] = useState(false)
+  const [modalAkan, setModalAkan] = useState(false)
   const [modal2, setModal2] = useState(false)
   const [file, setFile] = useState()
   const [image, setImage] = useState('')
@@ -155,38 +156,14 @@ const PencabutanReklame = () => {
               <div>{item.lokasi_pemasangan}</div>
             </CTableDataCell>
             <CTableDataCell>
-              {item.tanggal_rencana_dicopot !== 'N/A' ? (
+              {item.tanggal_rencana_dicopot !== null ? (
                 <div>{format(new Date(item.tanggal_rencana_dicopot), 'dd MMMM yyyy')}</div>
               ) : (
                 'N/A'
               )}
             </CTableDataCell>
             <CTableDataCell>{badgeSelector(item.status)}</CTableDataCell>
-            <CTableDataCell>
-              {item.status !== 'Sudah Dicabut' ? (
-                <CButton
-                  className="text-white"
-                  color="danger"
-                  onClick={() => {
-                    setId(item.id)
-                    setModal2(!modal2)
-                  }}
-                >
-                  Aksi
-                </CButton>
-              ) : (
-                <CButton
-                  className="text-white"
-                  color="info"
-                  onClick={() => {
-                    setImage(item.url)
-                    setModal(!modal)
-                  }}
-                >
-                  Lihat
-                </CButton>
-              )}
-            </CTableDataCell>
+            <CTableDataCell>{buttonSelector(item.status, item.id, item.url)}</CTableDataCell>
           </CTableRow>
         ))
       } else {
@@ -257,6 +234,74 @@ const PencabutanReklame = () => {
         addToast(errorToast)
       })
     })
+  }
+
+  const submitHandler = () => {
+    let formData = new URLSearchParams()
+    formData.append('id', id)
+    formData.append('tanggal_rencana_dicopot', date)
+    formData.append('status', 'Akan Dicabut')
+    axios.put('https://api-depi.bakanui.online/reklame-admin', formData).then(() => {
+      setModalAkan(!modalAkan)
+      fetchData(statusFilter, npwpdFilter, reset)
+      const errorToast = (
+        <CToast title="Berhasil">
+          <CToastHeader color="success" closeButton>
+            <CIcon className="rounded me-2" icon={cilWarning} />
+            <strong className="me-auto">Aksi berhasil!</strong>
+          </CToastHeader>
+          <CToastBody>Data berhasil disimpan.</CToastBody>
+        </CToast>
+      )
+      addToast(errorToast)
+    })
+  }
+
+  const buttonSelector = (status, id, url) => {
+    switch (status) {
+      case 'Akan Dicabut':
+        return (
+          <CButton
+            className="text-white"
+            color="danger"
+            onClick={() => {
+              setId(id)
+              setModal2(!modal2)
+            }}
+          >
+            Aksi
+          </CButton>
+        )
+        break
+      case 'Ijin Dicabut':
+        return (
+          <CButton
+            className="text-white"
+            color="danger"
+            onClick={() => {
+              setId(id)
+              setModalAkan(!modalAkan)
+            }}
+          >
+            Aksi
+          </CButton>
+        )
+        break
+      default:
+        return (
+          <CButton
+            className="text-white"
+            color="info"
+            onClick={() => {
+              setImage(url)
+              setModal(!modal)
+            }}
+          >
+            Lihat
+          </CButton>
+        )
+        break
+    }
   }
 
   const badgeSelector = (status) => {
@@ -332,7 +377,7 @@ const PencabutanReklame = () => {
                     <CsvDownloader
                       filename={(() => {
                         if (reset) {
-                          let strRet = 'laporan_' + jenisPajak + '_' + 'semua'
+                          let strRet = 'laporan_' + jenisPajak + '_semua'
                           return strRet
                         } else {
                           let strRet =
@@ -453,6 +498,39 @@ const PencabutanReklame = () => {
                 <CTableBody>{tableContents(reklame, ketetapan, setKetetapan)}</CTableBody>
               </CTable>
             </CCardBody>
+            <CModal visible={modalAkan} onClose={() => setModalAkan(false)}>
+              <CModalHeader>
+                <CModalTitle>Akan Dicabut</CModalTitle>
+              </CModalHeader>
+              <CModalBody>
+                <CForm>
+                  <CRow className="mb-3">
+                    <CFormLabel htmlFor="inputEmail3" className="col-sm-5 col-form-label">
+                      Tanggal Akan Dicabut
+                    </CFormLabel>
+                    <CCol sm={7}>
+                      <CDropdown variant="btn-group">
+                        <CButton variant="outline" color="dark" disabled>
+                          {format(new Date(date), 'dd MMMM yyyy')}
+                        </CButton>
+                        <CDropdownToggle variant="outline" color="secondary" />
+                        <CDropdownMenu>
+                          {/* <Calendar onChange={(item) => setDate(item)} locale={id} date={date} /> */}
+                        </CDropdownMenu>
+                      </CDropdown>
+                    </CCol>
+                  </CRow>
+                </CForm>
+              </CModalBody>
+              <CModalFooter>
+                <CButton color="secondary" onClick={() => setModalAkan(false)}>
+                  Batalkan
+                </CButton>
+                <CButton className="text-white" color="danger" onClick={() => submitHandler()}>
+                  Simpan tanggal
+                </CButton>
+              </CModalFooter>
+            </CModal>
             <CModal visible={modal2} onClose={() => setModal2(false)}>
               <CModalHeader>
                 <CModalTitle>Sudah Dicabut</CModalTitle>

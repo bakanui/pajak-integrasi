@@ -19,23 +19,29 @@ const _nav = [
     icon: <CIcon icon={cilViewQuilt} customClassName="nav-icon" />,
   },
   {
-    component: CNavGroup,
-    name: 'Pengawasan Reklame',
+    component: CNavItem,
+    name: 'Pengawasan',
     to: '/pengawasan',
     icon: <CIcon icon={cilBalanceScale} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Izin Habis',
-        to: '/pengawasan/izin-habis',
-      },
-      {
-        component: CNavItem,
-        name: 'Pencabutan Reklame',
-        to: '/pengawasan/pencabutan-reklame',
-      },
-    ],
   },
+  // {
+  //   component: CNavGroup,
+  //   name: 'Pengawasan Reklame',
+  //   to: '/pengawasan',
+  //   icon: <CIcon icon={cilBalanceScale} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'Izin Habis',
+  //       to: '/pengawasan/izin-habis',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Pencabutan Reklame',
+  //       to: '/pengawasan/pencabutan-reklame',
+  //     },
+  //   ],
+  // },
   {
     component: CNavTitle,
     name: 'Tagihan',

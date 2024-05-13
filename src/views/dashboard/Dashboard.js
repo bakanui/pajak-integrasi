@@ -110,6 +110,15 @@ const Dashboard = () => {
   const [parkirRealisasiHariIni, setParkirRealisasiHariIni] = useState(0)
   // Modal Aksi
   const [modal, setModal] = useState(false)
+  //data
+  const [nomor, setNomor] = useState('')
+  const [jenis, setJenis] = useState('')
+  const [lokasi_pemasangan, setLokasiPemasangan] = useState('')
+  const [nama_wajib_pajak, setNamaWajibPajak] = useState('')
+
+  const headers = {
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+  }
 
   const isAdminSatpolPP = localStorage.getItem('username') === 'admin_satpol_pp'
 
@@ -389,8 +398,10 @@ const Dashboard = () => {
         switch (error.message) {
           case 'Network error':
             message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
+            break
           default:
             message = 'Terjadi kesalahan tidak terduga. Silahkan hubungi Super Admin.'
+            break
         }
         const errorToast = (
           <CToast title="Terjadi kesalahan">
@@ -423,13 +434,60 @@ const Dashboard = () => {
       98011244: '01/11/2022 00:00:00 +0000',
       98011245: '01/12/2022 00:00:00 +0000',
     }
-    axios.post(query, data, headers).then((res) => {
-      let total = 0
-      res.data.data.map((r, index) => {
-        total = total + r.jmlPbbYgDibayar
+    axios
+      .post(query, data, headers)
+      .then((res) => {
+        let total = 0
+        res.data.data.map((r, index) => {
+          total = total + r.jmlPbbYgDibayar
+        })
+        setBumiTarget(total)
+        setBumiRealisasi(total)
       })
-      setBumiTarget(total)
-      setBumiRealisasi(total)
+      .catch((error) => {
+        setLoad(false)
+        let message = ''
+        switch (error.message) {
+          case 'Network error':
+            message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
+            break
+          default:
+            message = 'Terjadi kesalahan tidak terduga. Silahkan hubungi Super Admin.'
+            break
+        }
+        const errorToast = (
+          <CToast title="Terjadi kesalahan">
+            <CToastHeader closeButton>
+              <CIcon className="rounded me-2" icon={cilWarning} />
+              <strong className="me-auto">Terjadi kesalahan</strong>
+            </CToastHeader>
+            <CToastBody>{message}</CToastBody>
+          </CToast>
+        )
+        addToast(errorToast)
+      })
+  }
+
+  function handleCabutIzin() {
+    let formData = new URLSearchParams()
+    formData.append('nomor', nomor)
+    formData.append('jenis', jenis)
+    formData.append('lokasi_pemasangan', lokasi_pemasangan)
+    formData.append('nama_wajib_pajak', nama_wajib_pajak)
+    // formData.append('tanggal_rencana_dicopot', today)
+    formData.append('status', 'Ijin Dicabut')
+    axios.post('https://api-depi.bakanui.online/reklame-admin', formData, headers).then(() => {
+      setModal(!modal)
+      const errorToast = (
+        <CToast title="Berhasil">
+          <CToastHeader color="success" closeButton>
+            <CIcon className="rounded me-2" icon={cilWarning} />
+            <strong className="me-auto">Aksi berhasil!</strong>
+          </CToastHeader>
+          <CToastBody>Data berhasil disimpan.</CToastBody>
+        </CToast>
+      )
+      addToast(errorToast)
     })
   }
 
@@ -509,6 +567,10 @@ const Dashboard = () => {
                   color="danger"
                   onClick={() => {
                     setModal(!modal)
+                    setNomor(item?.nomor)
+                    setNamaWajibPajak(item?.nama_wajib_pajak)
+                    setJenis(item?.jenis_reklame)
+                    setLokasiPemasangan(item?.lokasi_pemasangan)
                   }}
                 >
                   Aksi
@@ -1258,7 +1320,13 @@ const Dashboard = () => {
           <CButton color="secondary" onClick={() => setModal(false)}>
             Batalkan
           </CButton>
-          <CButton className="text-white" color="danger" onClick={() => {}}>
+          <CButton
+            className="text-white"
+            color="danger"
+            onClick={() => {
+              handleCabutIzin()
+            }}
+          >
             Yakin
           </CButton>
         </CModalFooter>
