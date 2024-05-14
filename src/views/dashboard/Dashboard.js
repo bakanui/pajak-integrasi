@@ -47,7 +47,7 @@ import Restoran from '../../assets/images/restaurant.png'
 import Parkir from '../../assets/images/parking.png'
 
 const Dashboard = () => {
-  const [kadalFilter, setKadalFilter] = useState('Akan Kadaluarsa')
+  const [kadalFilter, setKadalFilter] = useState('Sudah Kadaluarsa')
   const [akanKadaluarsa, setAkanKadaluarsa] = useState([])
   const [sudahKadaluarsa, setSudahKadaluarsa] = useState([])
   const [load, setLoad] = useState(true)
@@ -137,15 +137,27 @@ const Dashboard = () => {
       .then((res) => {
         // Reklame
         const data = _.filter(res.data.data)
+        const inpStart = selectionRange[0].startDate
+        const inpEnd = selectionRange[0].endDate
+        const start = new Date(inpStart.setDate(inpStart.getDate()))
+        const end = new Date(inpEnd.setDate(inpEnd.getDate()))
+        // const data = dataed.filter((item) => {
+        //   return item.ketetapan.some((dateItem) => {
+        //     const date = new Date(dateItem.tanggalJatuhTempo)
+        //     const startDateComparison = inpStart
+        //       ? date >= new Date(inpStart.toISOString().split('T')[0])
+        //       : true
+        //     const endDateComparison = inpEnd
+        //       ? date <= new Date(inpEnd.toISOString().split('T')[0])
+        //       : true
+        //     return startDateComparison && endDateComparison
+        //   })
+        // })
         let dataRek = []
         let targetRek = 0
         let realisasiRek = 0
         let sisaTargetRek = 0
         let realisasiHariIniRek = 0
-        const inpStart = selectionRange[0].startDate
-        const inpEnd = selectionRange[0].endDate
-        const start = new Date(inpStart.setDate(inpStart.getDate() - 1))
-        const end = new Date(inpEnd.setDate(inpEnd.getDate() + 1))
         data.map((rek) => {
           let singular = {}
           if (rek.ketetapan.length !== 0) {
@@ -158,7 +170,66 @@ const Dashboard = () => {
                   const [endDay, endMonth, endYear] = period[1].split('-')
                   let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
                   let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
+                  let jatuh = new Date(ket.tanggalJatuhTempo)
                   const periode = [awal, akhir]
+                  if (awal >= start && jatuh <= end) {
+                    if (akhir < today) {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        jenis: rek.namaJenisPajak,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: 'Sudah Kadaluarsa',
+                      }
+                      dataRek.push(singular)
+                    } else if (awal >= start && awal < end && akhir > start && akhir <= end) {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        jenis: rek.namaJenisPajak,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: 'Akan Kadaluarsa',
+                      }
+                      return dataRek.push(singular)
+                    } else {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        jenis: rek.namaJenisPajak,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: ket.statusPembayaran,
+                      }
+                      return dataRek.push(singular)
+                    }
+                  }
+                }
+              } else {
+                const period = ket.periode.split(' s/d ')
+                const [startDay, startMonth, startYear] = period[0].split('-')
+                const [endDay, endMonth, endYear] = period[1].split('-')
+                let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
+                let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
+                let jatuh = new Date(ket.tanggalJatuhTempo)
+                const periode = [awal, akhir]
+                if (awal >= start && jatuh <= end) {
                   if (akhir < today) {
                     singular = {
                       nomor: ket.nomor,
@@ -173,7 +244,7 @@ const Dashboard = () => {
                       periode: periode,
                       status: 'Sudah Kadaluarsa',
                     }
-                    dataRek.push(singular)
+                    return dataRek.push(singular)
                   } else if (awal >= start && awal < end && akhir > start && akhir <= end) {
                     singular = {
                       nomor: ket.nomor,
@@ -206,59 +277,6 @@ const Dashboard = () => {
                     return dataRek.push(singular)
                   }
                 }
-              } else {
-                const period = ket.periode.split(' s/d ')
-                const [startDay, startMonth, startYear] = period[0].split('-')
-                const [endDay, endMonth, endYear] = period[1].split('-')
-                let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
-                let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
-                const periode = [awal, akhir]
-                if (akhir < today) {
-                  singular = {
-                    nomor: ket.nomor,
-                    npwpd: rek.npwpd,
-                    npwpdLama: rek.npwpdLama,
-                    jenis_reklame: rek.namaJenisPajakUsaha,
-                    jenis: rek.namaJenisPajak,
-                    lokasi_pemasangan: ket.lokasi,
-                    nama_wajib_pajak: rek.namaUsaha,
-                    nominal: ket.pokokPajak,
-                    tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                    periode: periode,
-                    status: 'Sudah Kadaluarsa',
-                  }
-                  return dataRek.push(singular)
-                } else if (awal >= start && awal < end && akhir > start && akhir <= end) {
-                  singular = {
-                    nomor: ket.nomor,
-                    npwpd: rek.npwpd,
-                    npwpdLama: rek.npwpdLama,
-                    jenis_reklame: rek.namaJenisPajakUsaha,
-                    jenis: rek.namaJenisPajak,
-                    lokasi_pemasangan: ket.lokasi,
-                    nama_wajib_pajak: rek.namaUsaha,
-                    nominal: ket.pokokPajak,
-                    tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                    periode: periode,
-                    status: 'Akan Kadaluarsa',
-                  }
-                  return dataRek.push(singular)
-                } else {
-                  singular = {
-                    nomor: ket.nomor,
-                    npwpd: rek.npwpd,
-                    npwpdLama: rek.npwpdLama,
-                    jenis_reklame: rek.namaJenisPajakUsaha,
-                    jenis: rek.namaJenisPajak,
-                    lokasi_pemasangan: ket.lokasi,
-                    nama_wajib_pajak: rek.namaUsaha,
-                    nominal: ket.pokokPajak,
-                    tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
-                    periode: periode,
-                    status: ket.statusPembayaran,
-                  }
-                  return dataRek.push(singular)
-                }
               }
             })
           } else {
@@ -280,18 +298,17 @@ const Dashboard = () => {
         })
         const akanKadal = _.filter(dataRek, { status: 'Akan Kadaluarsa' })
         const sudahKadal = _.filter(dataRek, { status: 'Sudah Kadaluarsa' })
-        inpStart.setDate(inpStart.getDate() + 1)
-        inpEnd.setDate(inpEnd.getDate() - 1)
         setAkanKadaluarsa(akanKadal)
         setSudahKadaluarsa(sudahKadal)
+        console.log(dataRek)
         //semua
         dataRek.map((d) => {
           if (d.nominal !== '') {
             targetRek = targetRek + parseInt(d.nominal)
-            if (d.status !== 'Belum Lunas') {
+            if (d.status === 'Sudah Lunas') {
               realisasiRek = realisasiRek + parseInt(d.nominal)
             }
-            if (new Date(d.periode[1]) === today) {
+            if (new Date(d.tanggal_jatuh_tempo) === today) {
               realisasiHariIniRek = realisasiHariIniRek + parseInt(d.nominal)
             }
           }
@@ -310,10 +327,10 @@ const Dashboard = () => {
         dataReklame.map((d) => {
           if (d.nominal !== '') {
             targetRekl = targetRekl + parseInt(d.nominal)
-            if (d.status !== 'Belum Lunas') {
+            if (d.status === 'Sudah Lunas') {
               realisasiRekl = realisasiRekl + parseInt(d.nominal)
             }
-            if (new Date(d.periode[1]) === today) {
+            if (new Date(d.tanggal_jatuh_tempo) === today) {
               realisasiHariIniRekl = realisasiHariIniRekl + parseInt(d.nominal)
             }
           }
@@ -332,10 +349,10 @@ const Dashboard = () => {
         dataAirTanah.map((d) => {
           if (d.nominal !== '') {
             targetAir = targetAir + parseInt(d.nominal)
-            if (d.status !== 'Belum Lunas') {
+            if (d.status === 'Sudah Lunas') {
               realisasiAir = realisasiAir + parseInt(d.nominal)
             }
-            if (new Date(d.periode[1]) === today) {
+            if (new Date(d.tanggal_jatuh_tempo) === today) {
               realisasiHariIniAir = realisasiHariIniAir + parseInt(d.nominal)
             }
           }
@@ -354,10 +371,10 @@ const Dashboard = () => {
         dataHiburan.map((d) => {
           if (d.nominal !== '') {
             targetHiburan = targetHiburan + parseInt(d.nominal)
-            if (d.status !== 'Belum Lunas') {
+            if (d.status === 'Sudah Lunas') {
               realisasiHiburan = realisasiHiburan + parseInt(d.nominal)
             }
-            if (new Date(d.periode[1]) === today) {
+            if (new Date(d.tanggal_jatuh_tempo) === today) {
               realisasiHariIniHiburan = realisasiHariIniHiburan + parseInt(d.nominal)
             }
           }
@@ -376,10 +393,10 @@ const Dashboard = () => {
         dataPeneranganJalan.map((d) => {
           if (d.nominal !== '') {
             targetPeneranganJalan = targetPeneranganJalan + parseInt(d.nominal)
-            if (d.status !== 'Belum Lunas') {
+            if (d.status === 'Sudah Lunas') {
               realisasiPeneranganJalan = realisasiPeneranganJalan + parseInt(d.nominal)
             }
-            if (new Date(d.periode[1]) === today) {
+            if (new Date(d.tanggal_jatuh_tempo) === today) {
               realisasiHariIniPeneranganJalan =
                 realisasiHariIniPeneranganJalan + parseInt(d.nominal)
             }
@@ -390,11 +407,77 @@ const Dashboard = () => {
         setPeneranganJalanRealisasi(realisasiPeneranganJalan)
         setPeneranganJalanSisaTarget(sisaTargetPeneranganJalan)
         setPeneranganJalanRealisasiHariIni(realisasiHariIniPeneranganJalan)
+        //hotel
+        const dataHotel = _.filter(dataRek, { jenis: 'Pajak Hotel' })
+        let targetHotel = 0
+        let realisasiHotel = 0
+        let sisaTargetHotel = 0
+        let realisasiHariIniHotel = 0
+        dataHotel.map((d) => {
+          if (d.nominal !== '') {
+            targetHotel = targetHotel + parseInt(d.nominal)
+            if (d.status === 'Sudah Lunas') {
+              realisasiHotel = realisasiHotel + parseInt(d.nominal)
+            }
+            if (new Date(d.tanggal_jatuh_tempo) === today) {
+              realisasiHariIniHotel = realisasiHariIniHotel + parseInt(d.nominal)
+            }
+          }
+        })
+        sisaTargetHotel = targetHotel - realisasiHotel
+        setHotelTarget(targetHotel)
+        setHotelRealisasi(realisasiHotel)
+        setHotelSisaTarget(sisaTargetHotel)
+        setHotelRealisasiHariIni(realisasiHariIniHotel)
+        //Restaurant
+        const dataRestaurant = _.filter(dataRek, { jenis: 'Pajak Restoran' })
+        let targetRestaurant = 0
+        let realisasiRestaurant = 0
+        let sisaTargetRestaurant = 0
+        let realisasiHariIniRestaurant = 0
+        dataRestaurant.map((d) => {
+          if (d.nominal !== '') {
+            targetRestaurant = targetRestaurant + parseInt(d.nominal)
+            if (d.status === 'Sudah Lunas') {
+              realisasiRestaurant = realisasiRestaurant + parseInt(d.nominal)
+            }
+            if (new Date(d.tanggal_jatuh_tempo) === today) {
+              realisasiHariIniRestaurant = realisasiHariIniRestaurant + parseInt(d.nominal)
+            }
+          }
+        })
+        sisaTargetRestaurant = targetRestaurant - realisasiRestaurant
+        setRestaurantTarget(targetRestaurant)
+        setRestaurantRealisasi(realisasiRestaurant)
+        setRestaurantSisaTarget(sisaTargetRestaurant)
+        setRestaurantRealisasiHariIni(realisasiHariIniRestaurant)
+        //Parkir
+        const dataParkir = _.filter(dataRek, { jenis: 'Pajak Parkir' })
+        let targetParkir = 0
+        let realisasiParkir = 0
+        let sisaTargetParkir = 0
+        let realisasiHariIniParkir = 0
+        dataParkir.map((d) => {
+          if (d.nominal !== '') {
+            targetParkir = targetParkir + parseInt(d.nominal)
+            if (d.status === 'Sudah Lunas') {
+              realisasiParkir = realisasiParkir + parseInt(d.nominal)
+            }
+            if (new Date(d.tanggal_jatuh_tempo) === today) {
+              realisasiHariIniParkir = realisasiHariIniParkir + parseInt(d.nominal)
+            }
+          }
+        })
+        sisaTargetParkir = targetParkir - realisasiParkir
+        setParkirTarget(targetParkir)
+        setParkirRealisasi(realisasiParkir)
+        setParkirSisaTarget(sisaTargetParkir)
+        setParkirRealisasiHariIni(realisasiHariIniParkir)
         setLoad(false)
       })
       .catch((error) => {
         setLoad(false)
-        const message = ''
+        let message = ''
         switch (error.message) {
           case 'Network error':
             message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
@@ -547,15 +630,19 @@ const Dashboard = () => {
               />
             </CTableDataCell>
             <CTableDataCell>
-              {item.tanggal_jatuh_tempo !== 'N/A' ? (
-                <div>{format(new Date(item.tanggal_jatuh_tempo), 'dd MMMM yyyy')}</div>
+              {item.periode !== 'N/A' ? (
+                <div>
+                  {format(new Date(item.periode[0]), 'dd MMMM yyyy') +
+                    ' - ' +
+                    format(new Date(item.periode[1]), 'dd MMMM yyyy')}
+                </div>
               ) : (
                 'N/A'
               )}
             </CTableDataCell>
             <CTableDataCell>
-              {item.periode !== 'N/A' ? (
-                <div>{format(new Date(item.periode[1]), 'dd MMMM yyyy')}</div>
+              {item.tanggal_jatuh_tempo !== 'N/A' ? (
+                <div>{format(new Date(item.tanggal_jatuh_tempo), 'dd MMMM yyyy')}</div>
               ) : (
                 'N/A'
               )}
@@ -605,7 +692,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData()
-    fetchPbb()
+    // fetchPbb()
   }, [])
 
   return (
@@ -647,7 +734,7 @@ const Dashboard = () => {
                               value={semuaTarget}
                               displayType={'text'}
                               thousandSeparator={true}
-                              // prefix={'Rp '}
+                              prefix={'Rp '}
                             />
                           </h2>
                         </div>
@@ -658,7 +745,7 @@ const Dashboard = () => {
                               value={semuaRealisasi}
                               displayType={'text'}
                               thousandSeparator={true}
-                              // prefix={'Rp '}
+                              prefix={'Rp '}
                             />
                           </h2>
                         </div>
@@ -676,7 +763,7 @@ const Dashboard = () => {
                               value={semuaSisaTarget}
                               displayType={'text'}
                               thousandSeparator={true}
-                              // prefix={'Rp '}
+                              prefix={'Rp '}
                             />
                           </h2>
                         </div>
@@ -687,7 +774,7 @@ const Dashboard = () => {
                               value={semuaRealisasiHariIni}
                               displayType={'text'}
                               thousandSeparator={true}
-                              // prefix={'Rp '}
+                              prefix={'Rp '}
                             />
                           </h2>
                         </div>
@@ -717,7 +804,7 @@ const Dashboard = () => {
                           value={reklameTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -728,7 +815,7 @@ const Dashboard = () => {
                           value={reklameRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -739,7 +826,7 @@ const Dashboard = () => {
                           value={reklameSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -750,7 +837,7 @@ const Dashboard = () => {
                           value={reklameRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -780,7 +867,7 @@ const Dashboard = () => {
                           value={airTanahTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -791,7 +878,7 @@ const Dashboard = () => {
                           value={airTanahRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -802,7 +889,7 @@ const Dashboard = () => {
                           value={airTanahSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -813,7 +900,7 @@ const Dashboard = () => {
                           value={airTanahRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -841,7 +928,7 @@ const Dashboard = () => {
                           value={hiburanTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -852,7 +939,7 @@ const Dashboard = () => {
                           value={hiburanRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -863,7 +950,7 @@ const Dashboard = () => {
                           value={hiburanSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -874,7 +961,7 @@ const Dashboard = () => {
                           value={hiburanRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -902,7 +989,7 @@ const Dashboard = () => {
                           value={peneranganJalanTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -913,7 +1000,7 @@ const Dashboard = () => {
                           value={peneranganJalanRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -924,7 +1011,7 @@ const Dashboard = () => {
                           value={peneranganJalanSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -935,7 +1022,7 @@ const Dashboard = () => {
                           value={peneranganJalanRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -963,7 +1050,7 @@ const Dashboard = () => {
                           value={bumiTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -974,7 +1061,7 @@ const Dashboard = () => {
                           value={bumiRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -985,7 +1072,7 @@ const Dashboard = () => {
                           value={bumiSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -996,7 +1083,7 @@ const Dashboard = () => {
                           value={bumiRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1022,7 +1109,7 @@ const Dashboard = () => {
                           value={hotelTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1033,7 +1120,7 @@ const Dashboard = () => {
                           value={hotelRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1044,7 +1131,7 @@ const Dashboard = () => {
                           value={hotelSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1055,7 +1142,7 @@ const Dashboard = () => {
                           value={hotelRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1081,7 +1168,7 @@ const Dashboard = () => {
                           value={restaurantTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1092,7 +1179,7 @@ const Dashboard = () => {
                           value={restaurantRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1103,7 +1190,7 @@ const Dashboard = () => {
                           value={restaurantSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1114,7 +1201,7 @@ const Dashboard = () => {
                           value={restaurantRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1140,7 +1227,7 @@ const Dashboard = () => {
                           value={parkirTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1151,7 +1238,7 @@ const Dashboard = () => {
                           value={parkirRealisasi}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1162,7 +1249,7 @@ const Dashboard = () => {
                           value={parkirSisaTarget}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1173,7 +1260,7 @@ const Dashboard = () => {
                           value={parkirRealisasiHariIni}
                           displayType={'text'}
                           thousandSeparator={true}
-                          // prefix={'Rp '}
+                          prefix={'Rp '}
                         />
                       </h5>
                     </div>
@@ -1200,7 +1287,7 @@ const Dashboard = () => {
                       format(new Date(selectionRange[0].endDate), 'dd MMMM yyyy')}
                   </div>
                 </CCol>
-                <CCol sm={7} className="d-none d-md-block">
+                <CCol className="d-none d-md-block">
                   <CButtonGroup className="float-end me-3">
                     <CButton
                       color="outline-warning"
@@ -1287,8 +1374,8 @@ const Dashboard = () => {
                         <CTableHeaderCell>Lokasi Pemasangan</CTableHeaderCell>
                         <CTableHeaderCell>Nama Wajib Pajak</CTableHeaderCell>
                         <CTableHeaderCell>Nominal</CTableHeaderCell>
-                        <CTableHeaderCell>Tanggal Jatuh Tempo</CTableHeaderCell>
                         <CTableHeaderCell>Periode</CTableHeaderCell>
+                        <CTableHeaderCell>Tanggal Jatuh Tempo</CTableHeaderCell>
                         {!isAdminSatpolPP && <CTableHeaderCell>Aksi</CTableHeaderCell>}
                       </CTableRow>
                     </CTableHead>
