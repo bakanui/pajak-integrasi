@@ -43,6 +43,7 @@ import {
   cilCloudDownload,
   cilCheck,
   cilAirplay,
+  cilCheckAlt,
 } from '@coreui/icons'
 import 'react-date-range/dist/styles.css' // main style file
 import 'react-date-range/dist/theme/default.css' // theme css file
@@ -79,7 +80,7 @@ const PencabutanReklame = () => {
   ])
   const [date, setDate] = useState(today)
   const reset = true
-  const jenisPajak = 'Reklame'
+  const [jenisPajak, setJenisPajak] = useState('')
 
   function fetchData(status, npwpd, date) {
     setLoad(true)
@@ -126,16 +127,11 @@ const PencabutanReklame = () => {
       return (
         <>
           <CTableRow v-for="item in tableItems" key="load">
-            <CTableDataCell></CTableDataCell>
-            <CTableDataCell></CTableDataCell>
-            <CTableDataCell></CTableDataCell>
-            <CTableDataCell>
+            <CTableDataCell colSpan={8}>
               <div className="m-5 text-center">
                 <div className="spinner-border text-danger"></div>
               </div>
             </CTableDataCell>
-            <CTableDataCell></CTableDataCell>
-            <CTableDataCell></CTableDataCell>
           </CTableRow>
         </>
       )
@@ -163,6 +159,9 @@ const PencabutanReklame = () => {
               )}
             </CTableDataCell>
             <CTableDataCell>{badgeSelector(item.status)}</CTableDataCell>
+            <CTableDataCell>
+              {item.jenis === 'Hiburan' ? badgeSelector(item.status) : '-'}
+            </CTableDataCell>
             <CTableDataCell>{buttonSelector(item.status, item.id, item.url)}</CTableDataCell>
           </CTableRow>
         ))
@@ -170,17 +169,11 @@ const PencabutanReklame = () => {
         return (
           <>
             <CTableRow v-for="item in tableItems" key="none">
-              <CTableDataCell></CTableDataCell>
-              <CTableDataCell></CTableDataCell>
-              <CTableDataCell></CTableDataCell>
-              <CTableDataCell>
+              <CTableDataCell colSpan={8}>
                 <div className="m-5 text-center">
                   <p>No data</p>
                 </div>
               </CTableDataCell>
-              <CTableDataCell></CTableDataCell>
-              <CTableDataCell></CTableDataCell>
-              {/* <CTableDataCell></CTableDataCell> */}
             </CTableRow>
           </>
         )
@@ -463,20 +456,46 @@ const PencabutanReklame = () => {
                       </CDropdownMenu>
                     </CDropdown>
                   </CCol>
-                  <CCol className="px-0">
+                  <CCol className="pl-0">
                     <CDropdown variant="btn-group">
                       <CButton variant="outline" color="dark" disabled>
-                        <CIcon icon={cilFilter} /> {statusFilter}
+                        {statusFilter}
                       </CButton>
                       <CDropdownToggle variant="outline" color="secondary" />
                       <CDropdownMenu>
                         {['Ijin Kedaluarsa', 'Ijin Dicabut', 'Akan Dicabut', 'Sudah Dicabut'].map(
                           (status) => (
                             <CDropdownItem key={status} onClick={() => setStatusFilter(status)}>
-                              {status}
+                              {status} {status === statusFilter && <CIcon icon={cilCheckAlt} />}
                             </CDropdownItem>
                           ),
                         )}
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CCol>
+                  <CCol className="pl-0">
+                    <CDropdown variant="btn-group">
+                      <CButton variant="outline" color="dark" disabled>
+                        {jenisPajak || 'Pilih Jenis Pajak'}
+                      </CButton>
+                      <CDropdownToggle variant="outline" color="secondary" />
+                      <CDropdownMenu>
+                        {[
+                          'Reklame',
+                          'Air Tanah',
+                          'Hiburan',
+                          'Penerangan Jalan',
+                          'Hotel',
+                          'Restoran',
+                          'Parkir',
+                        ].map((jenis) => (
+                          <CDropdownItem
+                            key={jenis}
+                            onClick={() => setJenisPajak((prev) => (prev === jenis ? '' : jenis))}
+                          >
+                            {jenis} {jenis === jenisPajak && <CIcon icon={cilCheckAlt} />}
+                          </CDropdownItem>
+                        ))}
                       </CDropdownMenu>
                     </CDropdown>
                   </CCol>
@@ -492,6 +511,7 @@ const PencabutanReklame = () => {
                     <CTableHeaderCell>Lokasi Pemasangan</CTableHeaderCell>
                     <CTableHeaderCell>Tanggal Pencabutan</CTableHeaderCell>
                     <CTableHeaderCell>Status</CTableHeaderCell>
+                    <CTableHeaderCell>SP</CTableHeaderCell>
                     <CTableHeaderCell></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
