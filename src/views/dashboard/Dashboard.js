@@ -27,9 +27,10 @@ import {
   CModalTitle,
   CModalBody,
   CModalFooter,
+  CDropdownItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilWarning } from '@coreui/icons'
+import { cilWarning, cilCheckAlt } from '@coreui/icons'
 import axios from 'axios'
 import _ from 'lodash'
 import { format } from 'date-fns'
@@ -61,6 +62,7 @@ const Dashboard = () => {
       key: 'selection',
     },
   ])
+  const [tahun, setTahun] = useState('2023')
   const [reset, setReset] = useState(true)
   const [toast, addToast] = useState(0)
   //Semua
@@ -141,18 +143,192 @@ const Dashboard = () => {
         const inpEnd = selectionRange[0].endDate
         const start = new Date(inpStart.setDate(inpStart.getDate()))
         const end = new Date(inpEnd.setDate(inpEnd.getDate()))
-        // const data = dataed.filter((item) => {
-        //   return item.ketetapan.some((dateItem) => {
-        //     const date = new Date(dateItem.tanggalJatuhTempo)
-        //     const startDateComparison = inpStart
-        //       ? date >= new Date(inpStart.toISOString().split('T')[0])
-        //       : true
-        //     const endDateComparison = inpEnd
-        //       ? date <= new Date(inpEnd.toISOString().split('T')[0])
-        //       : true
-        //     return startDateComparison && endDateComparison
-        //   })
-        // })
+        let dataRek = []
+        data.map((rek) => {
+          let singular = {}
+          if (rek.ketetapan.length !== 0) {
+            rek.ketetapan.map((ket) => {
+              if (ket.periode.includes(',')) {
+                const multiPeriode = ket.periode.split(', ')
+                for (var i = 0; i < multiPeriode; i++) {
+                  const period = multiPeriode[i].split(' s/d ')
+                  const [startDay, startMonth, startYear] = period[0].split('-')
+                  const [endDay, endMonth, endYear] = period[1].split('-')
+                  let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
+                  let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
+                  let jatuh = new Date(ket.tanggalJatuhTempo)
+                  const periode = [awal, akhir]
+                  if (awal >= start && jatuh <= end) {
+                    if (akhir < today) {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        jenis: rek.namaJenisPajak,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: 'Sudah Kadaluarsa',
+                      }
+                      dataRek.push(singular)
+                    } else if (awal >= start && awal < end && akhir > start && akhir <= end) {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        jenis: rek.namaJenisPajak,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: 'Akan Kadaluarsa',
+                      }
+                      return dataRek.push(singular)
+                    } else {
+                      singular = {
+                        nomor: ket.nomor,
+                        npwpd: rek.npwpd,
+                        npwpdLama: rek.npwpdLama,
+                        jenis_reklame: rek.namaJenisPajakUsaha,
+                        jenis: rek.namaJenisPajak,
+                        lokasi_pemasangan: ket.lokasi,
+                        nama_wajib_pajak: rek.namaUsaha,
+                        nominal: ket.pokokPajak,
+                        tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                        periode: periode,
+                        status: ket.statusPembayaran,
+                      }
+                      return dataRek.push(singular)
+                    }
+                  }
+                }
+              } else {
+                const period = ket.periode.split(' s/d ')
+                const [startDay, startMonth, startYear] = period[0].split('-')
+                const [endDay, endMonth, endYear] = period[1].split('-')
+                let awal = new Date(startYear + '-' + startMonth + '-' + startDay)
+                let akhir = new Date(endYear + '-' + endMonth + '-' + endDay)
+                let jatuh = new Date(ket.tanggalJatuhTempo)
+                const periode = [awal, akhir]
+                if (awal >= start && jatuh <= end) {
+                  if (akhir < today) {
+                    singular = {
+                      nomor: ket.nomor,
+                      npwpd: rek.npwpd,
+                      npwpdLama: rek.npwpdLama,
+                      jenis_reklame: rek.namaJenisPajakUsaha,
+                      jenis: rek.namaJenisPajak,
+                      lokasi_pemasangan: ket.lokasi,
+                      nama_wajib_pajak: rek.namaUsaha,
+                      nominal: ket.pokokPajak,
+                      tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                      periode: periode,
+                      status: 'Sudah Kadaluarsa',
+                    }
+                    return dataRek.push(singular)
+                  } else if (awal >= start && awal < end && akhir > start && akhir <= end) {
+                    singular = {
+                      nomor: ket.nomor,
+                      npwpd: rek.npwpd,
+                      npwpdLama: rek.npwpdLama,
+                      jenis_reklame: rek.namaJenisPajakUsaha,
+                      jenis: rek.namaJenisPajak,
+                      lokasi_pemasangan: ket.lokasi,
+                      nama_wajib_pajak: rek.namaUsaha,
+                      nominal: ket.pokokPajak,
+                      tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                      periode: periode,
+                      status: 'Akan Kadaluarsa',
+                    }
+                    return dataRek.push(singular)
+                  } else {
+                    singular = {
+                      nomor: ket.nomor,
+                      npwpd: rek.npwpd,
+                      npwpdLama: rek.npwpdLama,
+                      jenis_reklame: rek.namaJenisPajakUsaha,
+                      jenis: rek.namaJenisPajak,
+                      lokasi_pemasangan: ket.lokasi,
+                      nama_wajib_pajak: rek.namaUsaha,
+                      nominal: ket.pokokPajak,
+                      tanggal_jatuh_tempo: ket.tanggalJatuhTempo,
+                      periode: periode,
+                      status: ket.statusPembayaran,
+                    }
+                    return dataRek.push(singular)
+                  }
+                }
+              }
+            })
+          } else {
+            singular = {
+              nomor: 'N/A',
+              npwpd: rek.npwpd,
+              npwpdLama: rek.npwpdLama,
+              jenis_reklame: rek.namaJenisPajakUsaha,
+              jenis: rek.namaJenisPajak,
+              lokasi_pemasangan: rek.alamatObjekPajak,
+              nama_wajib_pajak: rek.namaUsaha,
+              nominal: 0,
+              tanggal_jatuh_tempo: 'N/A',
+              periode: 'N/A',
+              status: 'Belum Lunas',
+            }
+            return dataRek.push(singular)
+          }
+        })
+        const akanKadal = _.filter(dataRek, { status: 'Akan Kadaluarsa' })
+        const sudahKadal = _.filter(dataRek, { status: 'Sudah Kadaluarsa' })
+        setAkanKadaluarsa(akanKadal)
+        setSudahKadaluarsa(sudahKadal)
+        setLoad(false)
+      })
+      .catch((error) => {
+        setLoad(false)
+        let message = ''
+        switch (error.message) {
+          case 'Network error':
+            message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
+            break
+          default:
+            message = 'Terjadi kesalahan tidak terduga. Silahkan hubungi Super Admin.'
+            break
+        }
+        const errorToast = (
+          <CToast title="Terjadi kesalahan">
+            <CToastHeader closeButton>
+              <CIcon className="rounded me-2" icon={cilWarning} />
+              <strong className="me-auto">Terjadi kesalahan</strong>
+            </CToastHeader>
+            <CToastBody>{message}</CToastBody>
+          </CToast>
+        )
+        addToast(errorToast)
+      })
+  }
+
+  function fetchDataAll(tahun) {
+    setLoad(true)
+    let query =
+      'https://maiharta.ddns.net:3100/http://36.88.117.202:3005/api/web/fiskus/pad/kominfo/v_profile_ketetapan'
+    let headers = {
+      headers: {
+        Authorization:
+          'CTL1-VENDOR-APP App=integrasi-bangli,Token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.q_VDxCnmfRVta1byY2S-237lnWKTwpfAd8LID70Ls_o',
+      },
+    }
+    axios
+      .get(query, headers)
+      .then((res) => {
+        // Reklame
+        const data = _.filter(res.data.data)
+        const start = new Date('1 January ' + tahun)
+        const end = new Date('31 December ' + tahun)
         let dataRek = []
         let targetRek = 0
         let realisasiRek = 0
@@ -296,16 +472,11 @@ const Dashboard = () => {
             return dataRek.push(singular)
           }
         })
-        const akanKadal = _.filter(dataRek, { status: 'Akan Kadaluarsa' })
-        const sudahKadal = _.filter(dataRek, { status: 'Sudah Kadaluarsa' })
-        setAkanKadaluarsa(akanKadal)
-        setSudahKadaluarsa(sudahKadal)
-        console.log(dataRek)
         //semua
         dataRek.map((d) => {
           if (d.nominal !== '') {
             targetRek = targetRek + parseInt(d.nominal)
-            if (d.status === 'Sudah Lunas') {
+            if (d.status === 'Sudah Lunas' || d.status === 'Akan Kadaluarsa') {
               realisasiRek = realisasiRek + parseInt(d.nominal)
             }
             if (new Date(d.tanggal_jatuh_tempo) === today) {
@@ -349,7 +520,7 @@ const Dashboard = () => {
         dataAirTanah.map((d) => {
           if (d.nominal !== '') {
             targetAir = targetAir + parseInt(d.nominal)
-            if (d.status === 'Sudah Lunas') {
+            if (d.status === 'Sudah Lunas' || d.status === 'Akan Kadaluarsa') {
               realisasiAir = realisasiAir + parseInt(d.nominal)
             }
             if (new Date(d.tanggal_jatuh_tempo) === today) {
@@ -371,7 +542,7 @@ const Dashboard = () => {
         dataHiburan.map((d) => {
           if (d.nominal !== '') {
             targetHiburan = targetHiburan + parseInt(d.nominal)
-            if (d.status === 'Sudah Lunas') {
+            if (d.status === 'Sudah Lunas' || d.status === 'Akan Kadaluarsa') {
               realisasiHiburan = realisasiHiburan + parseInt(d.nominal)
             }
             if (new Date(d.tanggal_jatuh_tempo) === today) {
@@ -393,7 +564,7 @@ const Dashboard = () => {
         dataPeneranganJalan.map((d) => {
           if (d.nominal !== '') {
             targetPeneranganJalan = targetPeneranganJalan + parseInt(d.nominal)
-            if (d.status === 'Sudah Lunas') {
+            if (d.status === 'Sudah Lunas' || d.status === 'Akan Kadaluarsa') {
               realisasiPeneranganJalan = realisasiPeneranganJalan + parseInt(d.nominal)
             }
             if (new Date(d.tanggal_jatuh_tempo) === today) {
@@ -416,7 +587,7 @@ const Dashboard = () => {
         dataHotel.map((d) => {
           if (d.nominal !== '') {
             targetHotel = targetHotel + parseInt(d.nominal)
-            if (d.status === 'Sudah Lunas') {
+            if (d.status === 'Sudah Lunas' || d.status === 'Akan Kadaluarsa') {
               realisasiHotel = realisasiHotel + parseInt(d.nominal)
             }
             if (new Date(d.tanggal_jatuh_tempo) === today) {
@@ -438,7 +609,7 @@ const Dashboard = () => {
         dataRestaurant.map((d) => {
           if (d.nominal !== '') {
             targetRestaurant = targetRestaurant + parseInt(d.nominal)
-            if (d.status === 'Sudah Lunas') {
+            if (d.status === 'Sudah Lunas' || d.status === 'Akan Kadaluarsa') {
               realisasiRestaurant = realisasiRestaurant + parseInt(d.nominal)
             }
             if (new Date(d.tanggal_jatuh_tempo) === today) {
@@ -460,7 +631,7 @@ const Dashboard = () => {
         dataParkir.map((d) => {
           if (d.nominal !== '') {
             targetParkir = targetParkir + parseInt(d.nominal)
-            if (d.status === 'Sudah Lunas') {
+            if (d.status === 'Sudah Lunas' || d.status === 'Akan Kadaluarsa') {
               realisasiParkir = realisasiParkir + parseInt(d.nominal)
             }
             if (new Date(d.tanggal_jatuh_tempo) === today) {
@@ -692,6 +863,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData()
+    fetchDataAll(tahun)
     // fetchPbb()
   }, [])
 
@@ -717,7 +889,35 @@ const Dashboard = () => {
                   <CRow>
                     <CCol>
                       <h4 id="traffic" className="card-title mb-4">
-                        Laporan Target dan Realisasi
+                        Laporan Target dan Realisasi {tahun}
+                        <CDropdown variant="btn-group">
+                          <CDropdownToggle variant="ghost" color="white" />
+                          <CDropdownMenu>
+                            {[
+                              '2020',
+                              '2021',
+                              '2022',
+                              '2023',
+                              '2024',
+                              '2025',
+                              '2026',
+                              '2027',
+                              '2028',
+                              '2029',
+                              '2030',
+                            ].map((thn) => (
+                              <CDropdownItem
+                                key={thn}
+                                onClick={() => {
+                                  setTahun((prev) => (prev === thn ? '' : thn))
+                                  fetchDataAll(thn)
+                                }}
+                              >
+                                {thn} {thn === tahun && <CIcon icon={cilCheckAlt} />}
+                              </CDropdownItem>
+                            ))}
+                          </CDropdownMenu>
+                        </CDropdown>
                       </h4>
                     </CCol>
                   </CRow>

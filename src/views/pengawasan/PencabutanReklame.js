@@ -158,10 +158,8 @@ const PencabutanReklame = () => {
                 'N/A'
               )}
             </CTableDataCell>
+            <CTableDataCell>{badgeSPSelector(item.sp1, item.sp2, item.sp3)}</CTableDataCell>
             <CTableDataCell>{badgeSelector(item.status)}</CTableDataCell>
-            <CTableDataCell>
-              {item.jenis === 'Hiburan' ? badgeSelector(item.status) : '-'}
-            </CTableDataCell>
             <CTableDataCell>{buttonSelector(item.status, item.id, item.url)}</CTableDataCell>
           </CTableRow>
         ))
@@ -326,16 +324,44 @@ const PencabutanReklame = () => {
     }
   }
 
+  const badgeSPSelector = (sp1, sp2, sp3) => {
+    if (sp1) {
+      if (sp2) {
+        if (sp3) {
+          return (
+            <CBadge color="danger" shape="rounded-pill">
+              SP3
+            </CBadge>
+          )
+        } else {
+          return (
+            <CBadge color="warning" shape="rounded-pill">
+              SP2
+            </CBadge>
+          )
+        }
+      } else {
+        return (
+          <CBadge color="secondary" shape="rounded-pill">
+            SP1
+          </CBadge>
+        )
+      }
+    } else {
+      return 'N/A'
+    }
+  }
+
   return (
     <>
       <Helmet>
-        <title>Jadwal Pencabutan Reklame | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
+        <title>Pengawasan Izin | Aplikasi Pajak Terintegrasi Kabupaten Bangli</title>
       </Helmet>
       <CToaster ref={toaster} push={toast} placement="top-end" />
       <CContainer>
         <CRow>
           <CCol className="titleHead">
-            <h2>Jadwal Pencabutan Reklame</h2>
+            <h2>Pengawasan Izin</h2>
           </CCol>
         </CRow>
       </CContainer>
@@ -420,6 +446,10 @@ const PencabutanReklame = () => {
                           displayName: 'Periode',
                         },
                         {
+                          id: 'status-sp',
+                          displayName: 'SP',
+                        },
+                        {
                           id: 'status',
                           displayName: 'Status',
                         },
@@ -463,7 +493,7 @@ const PencabutanReklame = () => {
                       </CButton>
                       <CDropdownToggle variant="outline" color="secondary" />
                       <CDropdownMenu>
-                        {['Ijin Kedaluarsa', 'Ijin Dicabut', 'Akan Dicabut', 'Sudah Dicabut'].map(
+                        {['Ijin Kadaluarsa', 'Ijin Dicabut', 'Akan Dicabut', 'Sudah Dicabut'].map(
                           (status) => (
                             <CDropdownItem key={status} onClick={() => setStatusFilter(status)}>
                               {status} {status === statusFilter && <CIcon icon={cilCheckAlt} />}
@@ -476,11 +506,12 @@ const PencabutanReklame = () => {
                   <CCol className="pl-0">
                     <CDropdown variant="btn-group">
                       <CButton variant="outline" color="dark" disabled>
-                        {jenisPajak || 'Pilih Jenis Pajak'}
+                        {jenisPajak || 'Semua Jenis Pajak'}
                       </CButton>
                       <CDropdownToggle variant="outline" color="secondary" />
                       <CDropdownMenu>
                         {[
+                          'Semua Jenis Pajak',
                           'Reklame',
                           'Air Tanah',
                           'Hiburan',
@@ -510,8 +541,8 @@ const PencabutanReklame = () => {
                     <CTableHeaderCell>Jenis</CTableHeaderCell>
                     <CTableHeaderCell>Lokasi Pemasangan</CTableHeaderCell>
                     <CTableHeaderCell>Tanggal Pencabutan</CTableHeaderCell>
+                    <CTableHeaderCell>Status SP</CTableHeaderCell>
                     <CTableHeaderCell>Status</CTableHeaderCell>
-                    <CTableHeaderCell>SP</CTableHeaderCell>
                     <CTableHeaderCell></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
