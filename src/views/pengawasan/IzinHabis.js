@@ -229,7 +229,7 @@ const IzinHabis = () => {
     formData.append('nama_wajib_pajak', nama_wajib_pajak)
     formData.append('tanggal_rencana_dicopot', date)
     formData.append('status', 'Akan Dicabut')
-    axios.post('https://api-depi.bakanui.online/reklame', formData).then(() => {
+    axios.post('https://maiharta.ddns.net:3099/reklame', formData).then(() => {
       setModal(!modal)
       const errorToast = (
         <CToast title="Berhasil">

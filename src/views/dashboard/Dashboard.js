@@ -730,7 +730,7 @@ const Dashboard = () => {
     formData.append('nama_wajib_pajak', nama_wajib_pajak)
     // formData.append('tanggal_rencana_dicopot', today)
     formData.append('status', 'Ijin Dicabut')
-    axios.post('https://api-depi.bakanui.online/reklame-admin', formData, headers).then(() => {
+    axios.post('https://maiharta.ddns.net:3099/reklame-admin', formData, headers).then(() => {
       setModal(!modal)
       const errorToast = (
         <CToast title="Berhasil">

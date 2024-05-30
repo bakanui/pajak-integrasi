@@ -134,17 +134,23 @@ const PBB = () => {
           }
           return ultimate.push(singular)
         })
+        const belumBayar = _.filter(ultimate, { status: 'Belum Lunas' })
+        const sudahBayar = _.filter(ultimate, { status: 'Sudah Lunas' })
+        setCountBelumBayar(belumBayar.length)
+        setCountSudahBayar(sudahBayar.length)
         setReklame(ultimate)
         setLoad(false)
       })
       .catch((error) => {
         setLoad(false)
-        const message = ''
+        let message = ''
         switch (error.message) {
           case 'Network error':
             message = 'Terjadi kesalahan pada jaringan. Silahkan cek koneksi anda.'
+            break
           default:
             message = 'Terjadi kesalahan tidak terduga. Silahkan hubungi Super Admin.'
+            break
         }
         const errorToast = (
           <CToast title="An error has occurred">

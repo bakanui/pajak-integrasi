@@ -84,10 +84,10 @@ const PencabutanReklame = () => {
 
   function fetchData(status, npwpd, date) {
     setLoad(true)
-    let query = 'https://api-depi.bakanui.online/reklame?page=1&limit=10'
-    // if (status) {
-    //   query = query + '?status=' + status
-    // }
+    let query = 'https://maiharta.ddns.net:3099/reklame?page=1&limit=10'
+    if (status) {
+      query = query + '&status=' + status
+    }
     axios
       .get(query)
       .then((res) => {
@@ -208,9 +208,9 @@ const PencabutanReklame = () => {
     formData.append('id', id)
     formData.append('status', 'Sudah Dicabut')
     formData.append('file', file)
-    axios.post('https://api-depi.bakanui.online/upload', formData).then((res) => {
+    axios.post('https://maiharta.ddns.net:3099/upload', formData).then((res) => {
       formData.append('url', res.url)
-      axios.put('https://api-depi.bakanui.online/reklame', formData).then(() => {
+      axios.put('https://maiharta.ddns.net:3099/reklame', formData).then(() => {
         setModal2(!modal2)
         fetchData(statusFilter, npwpdFilter, reset)
         const errorToast = (
@@ -232,7 +232,7 @@ const PencabutanReklame = () => {
     formData.append('id', id)
     formData.append('tanggal_rencana_dicopot', date)
     formData.append('status', 'Akan Dicabut')
-    axios.put('https://api-depi.bakanui.online/reklame-admin', formData).then(() => {
+    axios.put('https://maiharta.ddns.net:3099/reklame-admin', formData).then(() => {
       setModalAkan(!modalAkan)
       fetchData(statusFilter, npwpdFilter, reset)
       const errorToast = (
